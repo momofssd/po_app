@@ -67,6 +67,8 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                 { label: "Source", width: "w-20" },
                 { label: "PO #", width: "w-28" },
                 { label: "Customer", width: "w-40" },
+                { label: "Sold To", width: "w-32" },
+                { label: "Ship To", width: "w-32" },
                 { label: "Material / Part #", width: "w-36" },
                 { label: "Qty", width: "w-20" },
                 { label: "Unit", width: "w-16" },
@@ -133,6 +135,26 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                       target.style.height = "auto";
                       target.style.height = target.scrollHeight + "px";
                     }}
+                  />
+                </td>
+
+                {/* Editable Sold To */}
+                <td className="px-2 py-3">
+                  <input
+                    type="text"
+                    value={row.soldTo || ""}
+                    onChange={(e) => onUpdate(index, "soldTo", e.target.value)}
+                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded px-2 py-1 text-sm text-slate-600 transition-all"
+                  />
+                </td>
+
+                {/* Editable Ship To */}
+                <td className="px-2 py-3">
+                  <input
+                    type="text"
+                    value={row.shipTo || ""}
+                    onChange={(e) => onUpdate(index, "shipTo", e.target.value)}
+                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded px-2 py-1 text-sm text-slate-600 transition-all"
                   />
                 </td>
 

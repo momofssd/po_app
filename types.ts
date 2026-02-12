@@ -2,6 +2,8 @@ export interface PurchaseOrderLine {
   sourceFile?: string;
   sourceUrl?: string;
   customerName: string;
+  soldTo?: string;
+  shipTo?: string;
   purchaseOrderNumber: string;
   requiredDeliveryDate: string;
   materialNumber: string;

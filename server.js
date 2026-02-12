@@ -107,22 +107,22 @@ app.get("/api/customers/search", async (req, res) => {
     return res.status(503).json({ message: "Database not connected yet." });
   }
 
-  const query = req.query.q;
-  if (!query || query.length < 2) {
-    return res.json([]);
-  }
+  const query = req.query.q || "";
 
   try {
-    // Search by customer_id OR inside the customer_names array
-    // Case insensitive regex search
-    const results = await customerMasterCollection
-      .find({
+    let filter = {};
+    if (query.length >= 1) {
+      filter = {
         $or: [
           { customer_id: { $regex: query, $options: "i" } },
           { customer_names: { $regex: query, $options: "i" } },
         ],
-      })
-      .limit(10)
+      };
+    }
+
+    const results = await customerMasterCollection
+      .find(filter)
+      .limit(50)
       .toArray();
 
     res.json(results);
