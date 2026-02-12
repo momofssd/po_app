@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { FileUpload } from './components/FileUpload';
-import { ResultsTable } from './components/ResultsTable';
-import { Login } from './components/Login';
-import { Header } from './components/Header';
-import { QueueDisplay } from './components/QueueDisplay';
-import { EmptyResults } from './components/EmptyResults';
-import { CustomerSelector } from './components/CustomerSelector';
-import { Footer } from './components/Footer';
-import { convertPdfToImages } from './services/pdfService';
-import { extractDataFromImages } from './services/geminiService';
-import { authService } from './services/authService';
-import { PurchaseOrderLine, ProcessingStatus, User } from './types';
+import React, { useEffect, useState } from "react";
+import { CustomerSelector } from "./components/CustomerSelector";
+import { EmptyResults } from "./components/EmptyResults";
+import { FileUpload } from "./components/FileUpload";
+import { Footer } from "./components/Footer";
+import { Header } from "./components/Header";
+import { Login } from "./components/Login";
+import { QueueDisplay } from "./components/QueueDisplay";
+import { ResultsTable } from "./components/ResultsTable";
+import { authService } from "./services/authService";
+import { extractDataFromImages } from "./services/geminiService";
+import { convertPdfToImages } from "./services/pdfService";
+import { ProcessingStatus, PurchaseOrderLine, User } from "./types";
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -19,7 +19,9 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [fileQueue, setFileQueue] = useState<File[]>([]);
   const [processedCount, setProcessedCount] = useState(0);
-  const [currentProcessingFile, setCurrentProcessingFile] = useState<string | null>(null);
+  const [currentProcessingFile, setCurrentProcessingFile] = useState<
+    string | null
+  >(null);
   const [isInitializing, setIsInitializing] = useState(true);
 
   // Check for existing session
@@ -40,13 +42,13 @@ const App: React.FC = () => {
   };
 
   const handleFilesSelect = (files: File[]) => {
-    setFileQueue(prev => [...prev, ...files]);
+    setFileQueue((prev) => [...prev, ...files]);
     setError(null);
     setStatus(ProcessingStatus.IDLE);
   };
 
   const removeFileFromQueue = (index: number) => {
-    setFileQueue(prev => prev.filter((_, i) => i !== index));
+    setFileQueue((prev) => prev.filter((_, i) => i !== index));
   };
 
   const clearQueue = () => {
@@ -56,8 +58,12 @@ const App: React.FC = () => {
     setProcessedCount(0);
   };
 
-  const handleDataUpdate = (index: number, field: keyof PurchaseOrderLine, value: any) => {
-    setData(prev => {
+  const handleDataUpdate = (
+    index: number,
+    field: keyof PurchaseOrderLine,
+    value: any,
+  ) => {
+    setData((prev) => {
       const newData = [...prev];
       newData[index] = { ...newData[index], [field]: value };
       return newData;
@@ -77,31 +83,36 @@ const App: React.FC = () => {
     for (let i = 0; i < fileQueue.length; i++) {
       const file = fileQueue[i];
       setCurrentProcessingFile(file.name);
-      
+
       try {
         const images = await convertPdfToImages(file);
-        
+
         if (images.length === 0) {
           console.warn(`No images extracted from ${file.name}`);
           continue;
         }
 
         const extractedLines = await extractDataFromImages(images);
-        
-        const linesWithSource = extractedLines.map(line => ({
+
+        // Create a blob URL for the PDF file
+        const fileUrl = URL.createObjectURL(file);
+
+        const linesWithSource = extractedLines.map((line) => ({
           ...line,
-          sourceFile: file.name
+          sourceFile: file.name,
+          sourceUrl: fileUrl,
         }));
 
         newResults.push(...linesWithSource);
-        setData(prev => [...prev, ...linesWithSource]);
-
+        setData((prev) => [...prev, ...linesWithSource]);
       } catch (err: any) {
         console.error(`Error processing ${file.name}:`, err);
-        setError(`Error processing ${file.name}: ${err.message}. Check console for details.`);
+        setError(
+          `Error processing ${file.name}: ${err.message}. Check console for details.`,
+        );
       }
 
-      setProcessedCount(prev => prev + 1);
+      setProcessedCount((prev) => prev + 1);
     }
 
     setStatus(ProcessingStatus.COMPLETE);
@@ -122,21 +133,21 @@ const App: React.FC = () => {
 
       <div className="flex-grow w-full max-w-[96%] mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
           {/* Left Panel: Controls & Queue (30%) */}
           <div className="lg:col-span-4 xl:col-span-3 space-y-6">
-            
             {/* New Customer Selector */}
             <CustomerSelector />
 
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-              <h2 className="text-lg font-bold text-slate-800 mb-4">Input Documents</h2>
-              <FileUpload 
-                onFilesSelect={handleFilesSelect} 
-                disabled={status === ProcessingStatus.PROCESSING} 
+              <h2 className="text-lg font-bold text-slate-800 mb-4">
+                Input Documents
+              </h2>
+              <FileUpload
+                onFilesSelect={handleFilesSelect}
+                disabled={status === ProcessingStatus.PROCESSING}
               />
-              
-              <QueueDisplay 
+
+              <QueueDisplay
                 files={fileQueue}
                 status={status}
                 processedCount={processedCount}
@@ -151,18 +162,17 @@ const App: React.FC = () => {
 
           {/* Right Panel: Results (70%) */}
           <div className="lg:col-span-8 xl:col-span-9 h-[calc(100vh-10rem)] min-h-[500px]">
-             {(status === ProcessingStatus.COMPLETE || data.length > 0) ? (
+            {status === ProcessingStatus.COMPLETE || data.length > 0 ? (
               <div className="h-full animate-fade-in-up">
-                 <ResultsTable data={data} onUpdate={handleDataUpdate} />
+                <ResultsTable data={data} onUpdate={handleDataUpdate} />
               </div>
             ) : (
               <EmptyResults />
             )}
           </div>
-
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );

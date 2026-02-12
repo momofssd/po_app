@@ -1,5 +1,6 @@
 export interface PurchaseOrderLine {
   sourceFile?: string;
+  sourceUrl?: string;
   customerName: string;
   purchaseOrderNumber: string;
   requiredDeliveryDate: string;
@@ -10,15 +11,15 @@ export interface PurchaseOrderLine {
 }
 
 export enum ProcessingStatus {
-  IDLE = 'IDLE',
-  PROCESSING = 'PROCESSING',
-  COMPLETE = 'COMPLETE',
-  ERROR = 'ERROR',
+  IDLE = "IDLE",
+  PROCESSING = "PROCESSING",
+  COMPLETE = "COMPLETE",
+  ERROR = "ERROR",
 }
 
 export interface User {
   username: string;
-  role: 'admin' | 'user';
+  role: "admin" | "user";
 }
 
 export interface Customer {
