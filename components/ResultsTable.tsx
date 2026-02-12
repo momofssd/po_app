@@ -3,11 +3,17 @@ import { PurchaseOrderLine } from "../types";
 
 interface ResultsTableProps {
   data: PurchaseOrderLine[];
+  tokenUsage?: {
+    promptTokens: number;
+    responseTokens: number;
+    totalTokens: number;
+  };
   onUpdate: (index: number, field: keyof PurchaseOrderLine, value: any) => void;
 }
 
 export const ResultsTable: React.FC<ResultsTableProps> = ({
   data,
+  tokenUsage,
   onUpdate,
 }) => {
   if (data.length === 0) {
@@ -29,6 +35,26 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
               {data.length}
             </span>
           </h3>
+          {tokenUsage && tokenUsage.totalTokens > 0 && (
+            <div className="ml-4 px-3 py-1 bg-slate-50 border border-slate-100 rounded-lg flex items-center space-x-2">
+              <svg
+                className="w-3.5 h-3.5 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+              <span className="text-xs font-medium text-slate-600">
+                {tokenUsage.totalTokens.toLocaleString()} tokens
+              </span>
+            </div>
+          )}
         </div>
         <button
           onClick={() => {

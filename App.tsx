@@ -21,6 +21,11 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [status, setStatus] = useState<ProcessingStatus>(ProcessingStatus.IDLE);
   const [data, setData] = useState<PurchaseOrderLine[]>([]);
+  const [tokenUsage, setTokenUsage] = useState<{
+    promptTokens: number;
+    responseTokens: number;
+    totalTokens: number;
+  }>({ promptTokens: 0, responseTokens: 0, totalTokens: 0 });
   const [error, setError] = useState<string | null>(null);
   const [fileQueue, setFileQueue] = useState<File[]>([]);
   const [processedCount, setProcessedCount] = useState(0);
@@ -59,6 +64,7 @@ const App: React.FC = () => {
   const clearQueue = () => {
     setFileQueue([]);
     setData([]);
+    setTokenUsage({ promptTokens: 0, responseTokens: 0, totalTokens: 0 });
     setStatus(ProcessingStatus.IDLE);
     setProcessedCount(0);
   };
@@ -82,6 +88,7 @@ const App: React.FC = () => {
     setProcessedCount(0);
     setError(null);
     setData([]); // Start fresh for new batch
+    setTokenUsage({ promptTokens: 0, responseTokens: 0, totalTokens: 0 }); // Reset tokens
 
     const newResults: PurchaseOrderLine[] = [];
 
@@ -97,7 +104,16 @@ const App: React.FC = () => {
           continue;
         }
 
-        const extractedLines = await extractDataFromImages(images);
+        const { data: extractedLines, usage } =
+          await extractDataFromImages(images);
+
+        if (usage) {
+          setTokenUsage((prev) => ({
+            promptTokens: prev.promptTokens + usage.promptTokens,
+            responseTokens: prev.responseTokens + usage.responseTokens,
+            totalTokens: prev.totalTokens + usage.totalTokens,
+          }));
+        }
 
         // Enhance lines with Sold To and Ship To
         const enhancedLines = await Promise.all(
@@ -221,7 +237,11 @@ const App: React.FC = () => {
           <div className="lg:col-span-8 xl:col-span-9 h-[calc(100vh-10rem)] min-h-[500px]">
             {status === ProcessingStatus.COMPLETE || data.length > 0 ? (
               <div className="h-full animate-fade-in-up">
-                <ResultsTable data={data} onUpdate={handleDataUpdate} />
+                <ResultsTable
+                  data={data}
+                  tokenUsage={tokenUsage}
+                  onUpdate={handleDataUpdate}
+                />
               </div>
             ) : (
               <EmptyResults />

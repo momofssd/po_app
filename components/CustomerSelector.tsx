@@ -214,16 +214,39 @@ export const CustomerSelector: React.FC = () => {
       {/* Selected Customer Details */}
       {selectedCustomer ? (
         <div className="space-y-4 animate-fade-in">
-          {/* Sales Org Card */}
-          <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-4 border border-indigo-100/50">
-            <p className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-1">
-              Sales Organization
-            </p>
-            <div className="flex items-center">
-              <span className="text-2xl font-bold text-indigo-900">
-                {selectedCustomer.sales_org}
-              </span>
-              <div className="ml-auto bg-white px-2 py-1 rounded text-xs font-mono text-indigo-600 border border-indigo-100">
+          {/* Combined Customer Details Card */}
+          <div className="bg-white rounded-xl p-4 border border-slate-100 shadow-sm space-y-4">
+            <div className="flex justify-between items-start">
+              <div className="flex-1 mr-4">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+                  Customer Name
+                </p>
+                <h3 className="text-lg font-bold text-slate-800 leading-tight">
+                  {selectedCustomer.customer_names[0]}
+                </h3>
+              </div>
+              <div className="text-right">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+                  Customer ID
+                </p>
+                <span className="font-mono text-indigo-600 font-bold bg-indigo-50 px-2 py-1 rounded text-sm">
+                  {selectedCustomer.customer_id}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-50 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+                  Sales Organization
+                </p>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xl font-bold text-slate-700">
+                    {selectedCustomer.sales_org}
+                  </span>
+                </div>
+              </div>
+              <div className="bg-green-50 px-2.5 py-1 rounded-full text-xs font-medium text-green-600 border border-green-100">
                 Active
               </div>
             </div>
