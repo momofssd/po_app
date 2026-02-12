@@ -1,0 +1,38 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# Sensitive environment variables
+.env
+.env.local
+
+# Local data and credentials
+customer_master_data.json
+createCredentialAtlas.py
+
+# Compressed files and archives
+*.zip
+gemini-po-extractor.zip
+
+# Node modules (ensure this is present)
+node_modules/

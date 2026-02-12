@@ -1,0 +1,5 @@
+{
+  "name": "Gemini PO Extractor",
+  "description": "An intelligent Purchase Order extraction tool using Gemini 3 Pro to analyze PDF documents and extract structured line-item data.",
+  "requestFramePermissions": []
+}
