@@ -8,7 +8,12 @@ import { Login } from "./components/Login";
 import { QueueDisplay } from "./components/QueueDisplay";
 import { ResultsTable } from "./components/ResultsTable";
 import { authService } from "./services/authService";
-import { extractDataFromImages } from "./services/geminiService";
+import { customerService } from "./services/customerService";
+import {
+  determineShipTo,
+  determineSoldTo,
+  extractDataFromImages,
+} from "./services/geminiService";
 import { convertPdfToImages } from "./services/pdfService";
 import { ProcessingStatus, PurchaseOrderLine, User } from "./types";
 
@@ -94,10 +99,62 @@ const App: React.FC = () => {
 
         const extractedLines = await extractDataFromImages(images);
 
+        // Enhance lines with Sold To and Ship To
+        const enhancedLines = await Promise.all(
+          extractedLines.map(async (line) => {
+            let soldTo = "";
+            let shipTo = "";
+
+            if (line.customerName) {
+              try {
+                // 1. Narrow down candidates
+                const candidates = await customerService.searchCustomers(
+                  line.customerName,
+                );
+
+                if (candidates.length > 0) {
+                  // 2. Determine Sold To
+                  const soldToId = await determineSoldTo(
+                    line.customerName,
+                    candidates,
+                  );
+
+                  if (soldToId) {
+                    soldTo = soldToId;
+
+                    // 3. Determine Ship To
+                    const customer =
+                      candidates.find((c) => c.customer_id === soldToId) ||
+                      candidates.find((c) => c._id === soldToId); // Check both just in case
+
+                    if (customer && customer.ship_to && line.deliveryAddress) {
+                      const shipToKey = await determineShipTo(
+                        line.deliveryAddress,
+                        customer.ship_to,
+                      );
+                      if (shipToKey) {
+                        shipTo = shipToKey;
+                      }
+                    }
+                  }
+                }
+              } catch (err) {
+                console.error("Error enhancing line data:", err);
+              }
+            }
+
+            return {
+              ...line,
+              soldTo,
+              shipTo,
+            };
+          }),
+        );
+
         // Create a blob URL for the PDF file
         const fileUrl = URL.createObjectURL(file);
 
-        const linesWithSource = extractedLines.map((line) => ({
+        const linesWithSource = enhancedLines.map((line) => ({
           ...line,
           sourceFile: file.name,
           sourceUrl: fileUrl,
