@@ -35,10 +35,16 @@ export const determineSoldTo = async (
 
   const ai = getGeminiClient();
 
+  // Create a simplified list of candidates to save tokens
+  const simplifiedCandidates = candidates.map((c) => ({
+    customerId: c.customer_id,
+    names: c.customer_names,
+  }));
+
   const prompt = `
     I have a customer name extracted from a Purchase Order: "${poCustomerName}".
     I have a list of candidate customers from my database:
-    ${JSON.stringify(candidates, null, 2)}
+    ${JSON.stringify(simplifiedCandidates, null, 2)}
 
     Please determine which candidate is the best match for the PO customer name.
     The content in the database might be slightly different.

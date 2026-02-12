@@ -32,10 +32,20 @@ router.get("/search", async (req, res) => {
       }
     }
 
-    const results = await customerMasterCollection
-      .find(filter)
-      .limit(50)
-      .toArray();
+    let queryLimit = 50;
+    if (req.query.limit && req.query.limit === "none") {
+      queryLimit = 0; // 0 means no limit in MongoDB
+    } else if (req.query.limit) {
+      queryLimit = parseInt(req.query.limit.toString(), 10);
+    }
+
+    const cursor = customerMasterCollection.find(filter);
+
+    if (queryLimit > 0) {
+      cursor.limit(queryLimit);
+    }
+
+    const results = await cursor.toArray();
 
     res.json(results);
   } catch (error) {

@@ -124,8 +124,15 @@ const App: React.FC = () => {
             if (line.customerName) {
               try {
                 // 1. Narrow down candidates
+                // Extract the first word (alphanumeric) to broaden the search scope
+                const firstWord = line.customerName
+                  .trim()
+                  .split(/[^a-zA-Z0-9]+/)[0];
+
+                // Fetch ALL candidates matching the first word (limit="none")
                 const candidates = await customerService.searchCustomers(
-                  line.customerName,
+                  firstWord,
+                  "none",
                 );
 
                 if (candidates.length > 0) {
@@ -201,18 +208,18 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] font-sans text-slate-800">
+    <div className="min-h-screen flex flex-col bg-apple-bg font-sans text-apple-text selection:bg-apple-blue selection:text-white">
       <Header user={user} onLogout={handleLogout} />
 
-      <div className="flex-grow w-full max-w-[96%] mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div className="flex-grow w-full max-w-[98%] mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Panel: Controls & Queue (30%) */}
+          {/* Left Panel: Controls & Queue (25-33%) */}
           <div className="lg:col-span-4 xl:col-span-3 space-y-6">
             {/* New Customer Selector */}
             <CustomerSelector />
 
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-              <h2 className="text-lg font-bold text-slate-800 mb-4">
+            <div className="bg-apple-card rounded-3xl shadow-apple border border-white/50 p-8 backdrop-blur-xl">
+              <h2 className="text-xl font-semibold text-apple-text mb-6 tracking-tight">
                 Input Documents
               </h2>
               <FileUpload

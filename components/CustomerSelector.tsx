@@ -64,23 +64,10 @@ export const CustomerSelector: React.FC = () => {
 
   return (
     <div
-      className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6"
+      className="bg-apple-card rounded-3xl shadow-apple border border-white/50 p-8 backdrop-blur-xl"
       ref={wrapperRef}
     >
-      <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center">
-        <svg
-          className="w-5 h-5 text-indigo-500 mr-2"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z"
-          />
-        </svg>
+      <h2 className="text-xl font-semibold text-apple-text mb-6 flex items-center tracking-tight">
         Customer Master
       </h2>
 
@@ -89,7 +76,7 @@ export const CustomerSelector: React.FC = () => {
         <div className="relative">
           <input
             type="text"
-            className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer"
+            className="w-full pl-10 pr-10 py-3 bg-apple-bg/50 border border-slate-200/60 rounded-xl text-[15px] text-apple-text placeholder:text-apple-subtext focus:outline-none focus:ring-2 focus:ring-apple-blue/20 focus:border-apple-blue transition-all cursor-pointer"
             placeholder="Select or Search Customer..."
             value={query}
             onChange={(e) => {
@@ -100,7 +87,7 @@ export const CustomerSelector: React.FC = () => {
             disabled={!!selectedCustomer}
           />
           <svg
-            className="w-4 h-4 text-slate-400 absolute left-3.5 top-3"
+            className="w-4 h-4 text-apple-subtext absolute left-3.5 top-3.5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -116,7 +103,7 @@ export const CustomerSelector: React.FC = () => {
           <div className="absolute right-3 top-3 flex items-center space-x-2">
             {isSearching ? (
               <svg
-                className="animate-spin h-4 w-4 text-indigo-500"
+                className="animate-spin h-4 w-4 text-apple-subtext"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -138,7 +125,7 @@ export const CustomerSelector: React.FC = () => {
             ) : selectedCustomer ? (
               <button
                 onClick={handleClear}
-                className="p-1 text-slate-400 hover:text-red-500"
+                className="p-1 text-apple-subtext hover:text-red-500 transition-colors"
               >
                 <svg
                   className="w-4 h-4"
@@ -157,7 +144,7 @@ export const CustomerSelector: React.FC = () => {
             ) : (
               <button
                 onClick={toggleDropdown}
-                className="p-1 text-slate-400 hover:text-indigo-500"
+                className="p-1 text-apple-subtext hover:text-apple-text transition-colors"
               >
                 <svg
                   className={`w-4 h-4 transition-transform ${showDropdown ? "rotate-180" : ""}`}
@@ -179,22 +166,22 @@ export const CustomerSelector: React.FC = () => {
 
         {/* Dropdown Results */}
         {showDropdown && !selectedCustomer && (
-          <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-xl border border-slate-100 max-h-48 overflow-y-auto">
+          <div className="absolute z-50 w-full mt-2 bg-white/90 backdrop-blur-xl rounded-xl shadow-apple-hover border border-slate-100 max-h-56 overflow-y-auto custom-scrollbar">
             {results.length > 0 ? (
               results.map((customer) => (
                 <button
                   key={customer._id}
                   onClick={() => handleSelect(customer)}
-                  className="w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-50 last:border-0 transition-colors group"
+                  className="w-full text-left px-4 py-3 hover:bg-apple-bg border-b border-slate-50 last:border-0 transition-colors group"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="text-sm font-semibold text-slate-800">
+                      <p className="text-[15px] font-medium text-apple-text">
                         {customer.customer_names[0]}
                       </p>
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <p className="text-xs text-apple-subtext mt-0.5 font-medium">
                         ID:{" "}
-                        <span className="font-mono text-indigo-600">
+                        <span className="font-mono text-apple-text">
                           {customer.customer_id}
                         </span>
                       </p>
@@ -203,7 +190,7 @@ export const CustomerSelector: React.FC = () => {
                 </button>
               ))
             ) : (
-              <div className="px-4 py-3 text-sm text-slate-500 text-center">
+              <div className="px-4 py-4 text-sm text-apple-subtext text-center">
                 No customers found
               </div>
             )}
@@ -213,40 +200,40 @@ export const CustomerSelector: React.FC = () => {
 
       {/* Selected Customer Details */}
       {selectedCustomer ? (
-        <div className="space-y-4 animate-fade-in">
+        <div className="space-y-6 animate-fade-in">
           {/* Combined Customer Details Card */}
-          <div className="bg-white rounded-xl p-4 border border-slate-100 shadow-sm space-y-4">
+          <div className="bg-white/60 rounded-2xl p-6 border border-white/50 shadow-sm space-y-6 backdrop-blur-sm">
             <div className="flex justify-between items-start">
               <div className="flex-1 mr-4">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+                <p className="text-[11px] font-semibold text-apple-subtext uppercase tracking-widest mb-1.5">
                   Customer Name
                 </p>
-                <h3 className="text-lg font-bold text-slate-800 leading-tight">
+                <h3 className="text-[15px] font-semibold text-apple-text leading-tight tracking-tight">
                   {selectedCustomer.customer_names[0]}
                 </h3>
               </div>
               <div className="text-right">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+                <p className="text-[11px] font-semibold text-apple-subtext uppercase tracking-widest mb-1.5">
                   Customer ID
                 </p>
-                <span className="font-mono text-indigo-600 font-bold bg-indigo-50 px-2 py-1 rounded text-sm">
+                <span className="font-mono text-apple-blue font-medium bg-blue-50/50 px-2.5 py-1 rounded-lg text-xs border border-blue-100/50">
                   {selectedCustomer.customer_id}
                 </span>
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-50 flex items-center justify-between">
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+                <p className="text-[11px] font-semibold text-apple-subtext uppercase tracking-widest mb-1.5">
                   Sales Organization
                 </p>
                 <div className="flex items-center space-x-2">
-                  <span className="text-xl font-bold text-slate-700">
+                  <span className="text-sm font-semibold text-apple-text">
                     {selectedCustomer.sales_org}
                   </span>
                 </div>
               </div>
-              <div className="bg-green-50 px-2.5 py-1 rounded-full text-xs font-medium text-green-600 border border-green-100">
+              <div className="bg-green-50/80 px-3 py-1 rounded-full text-[11px] font-semibold text-green-700 border border-green-100/50 uppercase tracking-wide">
                 Active
               </div>
             </div>
@@ -254,23 +241,23 @@ export const CustomerSelector: React.FC = () => {
 
           {/* Ship To List */}
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+            <p className="text-[11px] font-semibold text-apple-subtext uppercase tracking-widest mb-3 pl-1">
               Ship To Addresses
             </p>
-            <div className="bg-slate-50 rounded-xl border border-slate-100 overflow-hidden max-h-60 overflow-y-auto">
+            <div className="bg-apple-bg/50 rounded-2xl border border-slate-200/60 overflow-hidden max-h-60 overflow-y-auto custom-scrollbar">
               <ul className="divide-y divide-slate-100">
                 {selectedCustomer.ship_to &&
                   Object.entries(selectedCustomer.ship_to).map(
                     ([id, address]) => (
                       <li
                         key={id}
-                        className="p-3 hover:bg-white transition-colors"
+                        className="p-4 hover:bg-white/60 transition-colors"
                       >
-                        <div className="flex items-start space-x-3">
-                          <div className="bg-white border border-slate-200 px-2 py-1 rounded text-sm font-mono font-bold text-slate-600 mt-0.5 shadow-sm">
+                        <div className="flex items-start space-x-4">
+                          <div className="bg-white border border-slate-200 px-2.5 py-1 rounded-md text-xs font-mono font-semibold text-apple-text mt-0.5 shadow-sm">
                             {id}
                           </div>
-                          <p className="text-xs text-slate-600 leading-relaxed">
+                          <p className="text-sm text-apple-text leading-relaxed font-light">
                             {address}
                           </p>
                         </div>
@@ -282,8 +269,8 @@ export const CustomerSelector: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="text-center py-6 border-2 border-dashed border-slate-100 rounded-xl">
-          <p className="text-xs text-slate-400">
+        <div className="text-center py-8 border-2 border-dashed border-slate-200/60 rounded-2xl bg-slate-50/30">
+          <p className="text-sm text-apple-subtext font-medium">
             Search to view Customer Master data
           </p>
         </div>

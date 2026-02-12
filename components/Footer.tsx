@@ -1,11 +1,12 @@
-import React from 'react';
+import React from "react";
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="w-full py-4 mt-auto border-t border-slate-200 bg-white">
-      <div className="max-w-[96%] mx-auto px-4 text-center">
-        <p className="text-xs text-slate-400 font-mono">
-          System Version: <span className="text-slate-600 font-semibold">v1.2.4-beta</span> | Build: 2025.02.26
+    <footer className="w-full py-6 mt-auto">
+      <div className="max-w-[98%] mx-auto px-4 text-center">
+        <p className="text-[11px] text-apple-subtext font-medium tracking-wide">
+          System Version: <span className="text-apple-text">v1.2.4-beta</span>{" "}
+          <span className="mx-2 text-slate-300">|</span> Build: 2026.02.12
         </p>
       </div>
     </footer>
