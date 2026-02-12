@@ -138,8 +138,13 @@ export const extractDataFromImages = async (
           unitOfMeasure: "TO",
         };
       }
-
-      return item;
+      // Condition 3: All other units default to KG
+      else {
+        return {
+          ...item,
+          unitOfMeasure: "KG",
+        };
+      }
     });
 
     return { data, usage };
