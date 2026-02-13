@@ -59,7 +59,7 @@ export const determineSoldTo = async (
 
   try {
     const response = await generateWithRetry(ai, {
-      model: "gemini-2.0-flash-lite",
+      model: "gemini-2.5-flash-lite",
       contents: { parts: [{ text: prompt }] },
       config: {
         responseMimeType: "application/json",
@@ -104,7 +104,7 @@ export const determineShipTo = async (
 
   try {
     const response = await generateWithRetry(ai, {
-      model: "gemini-2.0-flash-lite",
+      model: "gemini-2.5-flash-lite",
       contents: { parts: [{ text: prompt }] },
       config: {
         responseMimeType: "application/json",
