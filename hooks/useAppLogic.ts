@@ -112,10 +112,32 @@ export const useAppLogic = () => {
 
         if (extractionMode === ExtractionMode.TEXT) {
           const text = await extractPdfText(file);
-          const result = await extractDataFromText(text);
-          extractedLines = result.data;
-          usage = result.usage;
+
+          // Check if PDF actually has enough text to be useful.
+          // If very few words are found, it's likely a scanned image with minimal OCR or garbage text.
+          const wordCount = text
+            ? text.split(/\s+/).filter((w) => w.length > 0).length
+            : 0;
+
+          if (wordCount < 10) {
+            console.warn(
+              `[Detection] ${file.name} appears to be an image (only ${wordCount} words found).`,
+            );
+            console.log(
+              `[Processing] Forcing IMAGE extraction for: ${file.name}`,
+            );
+            const images = await convertPdfToImages(file);
+            const result = await extractDataFromImages(images);
+            extractedLines = result.data;
+            usage = result.usage;
+          } else {
+            console.log(`[Processing] Using TEXT extraction for: ${file.name}`);
+            const result = await extractDataFromText(text);
+            extractedLines = result.data;
+            usage = result.usage;
+          }
         } else {
+          console.log(`[Processing] Using IMAGE extraction for: ${file.name}`);
           const images = await convertPdfToImages(file);
 
           if (images.length === 0) {
