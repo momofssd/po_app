@@ -1,8 +1,7 @@
 import { Customer } from "../types";
 import { authService } from "./authService";
 
-// Assuming running locally on port 3001
-const API_BASE_URL = "http://localhost:3001/api";
+const API_BASE_URL = "/api";
 
 export const customerService = {
   searchCustomers: async (

@@ -1,7 +1,7 @@
 import { PurchaseOrderLine } from "../types";
 import { authService } from "./authService";
 
-const API_URL = "http://localhost:3001/api/results";
+const API_URL = "/api/results";
 
 export const resultsService = {
   saveResults: async (data: PurchaseOrderLine[]): Promise<void> => {
@@ -33,7 +33,9 @@ export const resultsService = {
   getResultsUrl: (): string => {
     const token = authService.getToken();
     if (!token) return "";
-    return `${API_URL}?wms_session_token=${token}`;
+    // Make the URL absolute so it can be used by external applications
+    const baseUrl = window.location.origin;
+    return `${baseUrl}${API_URL}?wms_session_token=${token}`;
   },
 
   clearResults: async (): Promise<void> => {

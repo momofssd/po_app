@@ -2,8 +2,7 @@ import { User } from "../types";
 
 const STORAGE_KEY_USER = "wms_session_user";
 const STORAGE_KEY_TOKEN = "wms_session_token";
-// Using localhost. If this fails on some systems, try http://127.0.0.1:3001
-const API_URL = "http://localhost:3001/api/login";
+const API_URL = "/api/login";
 
 export const authService = {
   login: async (username: string, password: string): Promise<User> => {
