@@ -177,7 +177,7 @@ export const CustomerSelector: React.FC = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-[15px] font-medium text-apple-text">
-                        {customer.customer_names[0]}
+                        {customer.customer_names.join(" / ")}
                       </p>
                       <p className="text-xs text-apple-subtext mt-0.5 font-medium">
                         ID:{" "}
@@ -209,7 +209,7 @@ export const CustomerSelector: React.FC = () => {
                   Customer Name
                 </p>
                 <h3 className="text-[15px] font-semibold text-apple-text leading-tight tracking-tight">
-                  {selectedCustomer.customer_names[0]}
+                  {selectedCustomer.customer_names.join(" / ")}
                 </h3>
               </div>
               <div className="text-right">
