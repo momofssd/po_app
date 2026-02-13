@@ -101,53 +101,44 @@ export const useAppLogic = () => {
     setData([]); // Start fresh for new batch
     setTokenUsage({ promptTokens: 0, responseTokens: 0, totalTokens: 0 }); // Reset tokens
 
-    const newResults: PurchaseOrderLine[] = [];
+    // Caches to avoid redundant Gemini calls across files/lines
+    const soldToCache = new Map<string, { id: string; candidates: any[] }>();
+    const shipToCache = new Map<string, string>();
 
-    for (let i = 0; i < fileQueue.length; i++) {
-      const file = fileQueue[i];
+    // Process files with limited concurrency (e.g., 2 at a time to avoid heavy rate limits)
+    const CONCURRENCY_LIMIT = 2;
+    const filesToProcess = [...fileQueue];
+
+    const processFile = async (file: File) => {
       setCurrentProcessingFile(file.name);
 
       try {
-        let extractedLines, usage;
+        let extractedLines: PurchaseOrderLine[] = [],
+          usage;
 
         if (extractionMode === ExtractionMode.TEXT) {
           const text = await extractPdfText(file);
-
-          // Check if PDF actually has enough text to be useful.
-          // If very few words are found, it's likely a scanned image with minimal OCR or garbage text.
           const wordCount = text
             ? text.split(/\s+/).filter((w) => w.length > 0).length
             : 0;
 
           if (wordCount < 10) {
-            console.warn(
-              `[Detection] ${file.name} appears to be an image (only ${wordCount} words found).`,
-            );
-            console.log(
-              `[Processing] Forcing IMAGE extraction for: ${file.name}`,
-            );
             const images = await convertPdfToImages(file);
             const result = await extractDataFromImages(images);
             extractedLines = result.data;
             usage = result.usage;
           } else {
-            console.log(`[Processing] Using TEXT extraction for: ${file.name}`);
             const result = await extractDataFromText(text);
             extractedLines = result.data;
             usage = result.usage;
           }
         } else {
-          console.log(`[Processing] Using IMAGE extraction for: ${file.name}`);
           const images = await convertPdfToImages(file);
-
-          if (images.length === 0) {
-            console.warn(`No images extracted from ${file.name}`);
-            continue;
+          if (images.length > 0) {
+            const result = await extractDataFromImages(images);
+            extractedLines = result.data;
+            usage = result.usage;
           }
-
-          const result = await extractDataFromImages(images);
-          extractedLines = result.data;
-          usage = result.usage;
         }
 
         if (usage) {
@@ -158,7 +149,7 @@ export const useAppLogic = () => {
           }));
         }
 
-        // Enhance lines with Sold To and Ship To
+        // Enhance lines in parallel
         const enhancedLines = await Promise.all(
           extractedLines.map(async (line) => {
             let soldTo = "";
@@ -167,47 +158,54 @@ export const useAppLogic = () => {
 
             if (line.customerName) {
               try {
-                // 1. Narrow down candidates
-                // Extract the first word (alphanumeric) to broaden the search scope
-                const firstWord = line.customerName
-                  .trim()
-                  .split(/[^a-zA-Z0-9]+/)[0];
+                const customerKey = line.customerName.trim().toLowerCase();
+                let soldToData = soldToCache.get(customerKey);
 
-                // Fetch ALL candidates matching the first word (limit="none")
-                const candidates = await customerService.searchCustomers(
-                  firstWord,
-                  "none",
-                );
-
-                if (candidates.length > 0) {
-                  // 2. Determine Sold To
-                  const soldToId = await determineSoldTo(
-                    line.customerName,
-                    candidates,
+                if (!soldToData) {
+                  const firstWord = line.customerName
+                    .trim()
+                    .split(/[^a-zA-Z0-9]+/)[0];
+                  const candidates = await customerService.searchCustomers(
+                    firstWord,
+                    "none",
                   );
 
-                  if (soldToId) {
-                    soldTo = soldToId;
+                  if (candidates.length > 0) {
+                    const soldToId = await determineSoldTo(
+                      line.customerName,
+                      candidates,
+                    );
+                    if (soldToId) {
+                      soldToData = { id: soldToId, candidates };
+                      soldToCache.set(customerKey, soldToData);
+                    }
+                  }
+                }
 
-                    // 3. Determine Ship To & Sales Org
-                    const customer =
-                      candidates.find((c) => c.customer_id === soldToId) ||
-                      candidates.find((c) => c._id === soldToId); // Check both just in case
+                if (soldToData) {
+                  soldTo = soldToData.id;
+                  const customer = soldToData.candidates.find(
+                    (c) => c.customer_id === soldTo || c._id === soldTo,
+                  );
 
-                    if (customer) {
-                      if (customer.sales_org) {
-                        salesOrg = customer.sales_org;
-                      }
+                  if (customer) {
+                    if (customer.sales_org) salesOrg = customer.sales_org;
 
-                      if (customer.ship_to && line.deliveryAddress) {
-                        const shipToKey = await determineShipTo(
+                    if (customer.ship_to && line.deliveryAddress) {
+                      const shipToKeyInput = `${soldTo}_${line.deliveryAddress.trim().toLowerCase()}`;
+                      let cachedShipTo = shipToCache.get(shipToKeyInput);
+
+                      if (!cachedShipTo) {
+                        const determined = await determineShipTo(
                           line.deliveryAddress,
                           customer.ship_to,
                         );
-                        if (shipToKey) {
-                          shipTo = shipToKey;
+                        if (determined) {
+                          cachedShipTo = determined;
+                          shipToCache.set(shipToKeyInput, determined);
                         }
                       }
+                      if (cachedShipTo) shipTo = cachedShipTo;
                     }
                   }
                 }
@@ -216,34 +214,30 @@ export const useAppLogic = () => {
               }
             }
 
-            return {
-              ...line,
-              soldTo,
-              shipTo,
-              salesOrg,
-            };
+            return { ...line, soldTo, shipTo, salesOrg };
           }),
         );
 
-        // Create a blob URL for the PDF file
         const fileUrl = URL.createObjectURL(file);
-
         const linesWithSource = enhancedLines.map((line) => ({
           ...line,
           sourceFile: file.name,
           sourceUrl: fileUrl,
         }));
 
-        newResults.push(...linesWithSource);
         setData((prev) => [...prev, ...linesWithSource]);
       } catch (err: any) {
         console.error(`Error processing ${file.name}:`, err);
-        setError(
-          `Error processing ${file.name}: ${err.message}. Check console for details.`,
-        );
+        setError(`Error processing ${file.name}: ${err.message}`);
+      } finally {
+        setProcessedCount((prev) => prev + 1);
       }
+    };
 
-      setProcessedCount((prev) => prev + 1);
+    // Execute with limited concurrency
+    for (let i = 0; i < filesToProcess.length; i += CONCURRENCY_LIMIT) {
+      const chunk = filesToProcess.slice(i, i + CONCURRENCY_LIMIT);
+      await Promise.all(chunk.map(processFile));
     }
 
     setStatus(ProcessingStatus.COMPLETE);

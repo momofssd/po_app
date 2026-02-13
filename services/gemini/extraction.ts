@@ -140,16 +140,15 @@ export const extractDataFromImages = async (
 ): Promise<ExtractionResult> => {
   const ai = getGeminiClient();
 
-  // Prepare contents: Text prompt + Image parts
-  const parts = [];
-
-  // Add the prompt text
-  parts.push({ text: PO_PROMPT });
+  // Prepare contents efficiently: Text prompt + Image parts
+  const parts: any[] = [{ text: PO_PROMPT }];
 
   // Add images
-  base64Images.forEach((base64) => {
-    // Strip the "data:image/jpeg;base64," prefix if present
-    const cleanBase64 = base64.replace(/^data:image\/\w+;base64,/, "");
+  for (const base64 of base64Images) {
+    // Strip the prefix efficiently
+    const cleanBase64 = base64.startsWith("data:")
+      ? base64.split(",")[1]
+      : base64;
 
     parts.push({
       inlineData: {
@@ -157,10 +156,9 @@ export const extractDataFromImages = async (
         data: cleanBase64,
       },
     });
-  });
+  }
 
   try {
-    // Switch to gemini-3-flash-preview for higher rate limits and speed
     const response = await generateWithRetry(ai, {
       model: "gemini-3-flash-preview",
       contents: {
