@@ -20,6 +20,11 @@ export enum ProcessingStatus {
   ERROR = "ERROR",
 }
 
+export enum ExtractionMode {
+  IMAGE = "IMAGE",
+  TEXT = "TEXT",
+}
+
 export interface User {
   username: string;
   role: "admin" | "user";

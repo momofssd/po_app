@@ -5,13 +5,22 @@ import {
   determineShipTo,
   determineSoldTo,
   extractDataFromImages,
+  extractDataFromText,
 } from "../services/geminiService";
-import { convertPdfToImages } from "../services/pdfService";
+import { convertPdfToImages, extractPdfText } from "../services/pdfService";
 import { resultsService } from "../services/resultsService";
-import { ProcessingStatus, PurchaseOrderLine, User } from "../types";
+import {
+  ExtractionMode,
+  ProcessingStatus,
+  PurchaseOrderLine,
+  User,
+} from "../types";
 
 export const useAppLogic = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [extractionMode, setExtractionMode] = useState<ExtractionMode>(
+    ExtractionMode.IMAGE,
+  );
   const [status, setStatus] = useState<ProcessingStatus>(ProcessingStatus.IDLE);
   const [data, setData] = useState<PurchaseOrderLine[]>([]);
   const [tokenUsage, setTokenUsage] = useState<{
@@ -99,15 +108,25 @@ export const useAppLogic = () => {
       setCurrentProcessingFile(file.name);
 
       try {
-        const images = await convertPdfToImages(file);
+        let extractedLines, usage;
 
-        if (images.length === 0) {
-          console.warn(`No images extracted from ${file.name}`);
-          continue;
+        if (extractionMode === ExtractionMode.TEXT) {
+          const text = await extractPdfText(file);
+          const result = await extractDataFromText(text);
+          extractedLines = result.data;
+          usage = result.usage;
+        } else {
+          const images = await convertPdfToImages(file);
+
+          if (images.length === 0) {
+            console.warn(`No images extracted from ${file.name}`);
+            continue;
+          }
+
+          const result = await extractDataFromImages(images);
+          extractedLines = result.data;
+          usage = result.usage;
         }
-
-        const { data: extractedLines, usage } =
-          await extractDataFromImages(images);
 
         if (usage) {
           setTokenUsage((prev) => ({
@@ -228,5 +247,7 @@ export const useAppLogic = () => {
     handleStartProcessing,
     currentView,
     setCurrentView,
+    extractionMode,
+    setExtractionMode,
   };
 };

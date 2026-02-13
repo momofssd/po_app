@@ -27,6 +27,8 @@ const App: React.FC = () => {
     handleStartProcessing,
     currentView,
     setCurrentView,
+    extractionMode,
+    setExtractionMode,
   } = useAppLogic();
 
   const [rightPanelWidth, setRightPanelWidth] = useState(66.66); // Initial width in percentage
@@ -118,6 +120,8 @@ const App: React.FC = () => {
                 onRemoveFile={removeFileFromQueue}
                 onClearQueue={clearQueue}
                 onStartProcessing={handleStartProcessing}
+                extractionMode={extractionMode}
+                onExtractionModeChange={setExtractionMode}
               />
             </div>
 

@@ -40,6 +40,101 @@ const poResponseSchema: Schema = {
   },
 };
 
+export const extractDataFromText = async (
+  pdfText: string,
+): Promise<ExtractionResult> => {
+  const ai = getGeminiClient();
+
+  try {
+    const response = await generateWithRetry(ai, {
+      model: "gemini-3-flash-preview",
+      contents: {
+        parts: [{ text: PO_PROMPT }, { text: `PDF CONTENT:\n\n${pdfText}` }],
+      },
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: poResponseSchema,
+        temperature: 0,
+      },
+    });
+
+    const text = response.text;
+    if (!text) return { data: [] };
+
+    let data = JSON.parse(text) as PurchaseOrderLine[];
+
+    // Extract token usage
+    const usage = response.usageMetadata
+      ? {
+          promptTokens: response.usageMetadata.promptTokenCount || 0,
+          responseTokens: response.usageMetadata.candidatesTokenCount || 0,
+          totalTokens: response.usageMetadata.totalTokenCount || 0,
+        }
+      : undefined;
+
+    // Apply unit conversion logic (reusing same logic)
+    data = postProcessExtraction(data);
+
+    return { data, usage };
+  } catch (error) {
+    console.error("Gemini API Error (Text):", error);
+    throw error;
+  }
+};
+
+const postProcessExtraction = (
+  data: PurchaseOrderLine[],
+): PurchaseOrderLine[] => {
+  return data.map((item) => {
+    // Normalize unit to lowercase for comparison
+    const unit = item.unitOfMeasure
+      ? item.unitOfMeasure.toLowerCase().trim()
+      : "";
+
+    // Ensure quantity is a number
+    let qty = Number(item.orderQuantity);
+    if (isNaN(qty)) {
+      // Try to handle string numbers with commas
+      qty = parseFloat(String(item.orderQuantity).replace(/,/g, ""));
+    }
+
+    if (isNaN(qty)) {
+      return item; // If still not a number, return original item
+    }
+
+    // Define unit variations
+    const lbsVariations = ["lbs", "lb", "pound", "pounds", "lbs.", "pound(s)"];
+    const tonVariations = ["ton", "tons", "metric ton", "metric tons"];
+
+    // Condition 1: Convert LBS to KG
+    if (lbsVariations.includes(unit)) {
+      // Convert LBS to KG (1 lb = 0.45359237 kg)
+      const convertedQty = qty * 0.45359237;
+
+      return {
+        ...item,
+        orderQuantity: parseFloat(convertedQty.toFixed(2)), // Keep 2 decimal places
+        unitOfMeasure: "KG",
+      };
+    }
+    // Condition 2: Change Tons to TO (No quantity conversion)
+    else if (tonVariations.includes(unit)) {
+      return {
+        ...item,
+        // Quantity remains the same
+        unitOfMeasure: "TO",
+      };
+    }
+    // Condition 3: All other units default to KG
+    else {
+      return {
+        ...item,
+        unitOfMeasure: "KG",
+      };
+    }
+  });
+};
+
 export const extractDataFromImages = async (
   base64Images: string[],
 ): Promise<ExtractionResult> => {
@@ -93,61 +188,7 @@ export const extractDataFromImages = async (
       : undefined;
 
     // Post-processing logic for Unit Conversion
-    data = data.map((item) => {
-      // Normalize unit to lowercase for comparison
-      const unit = item.unitOfMeasure
-        ? item.unitOfMeasure.toLowerCase().trim()
-        : "";
-
-      // Ensure quantity is a number
-      let qty = Number(item.orderQuantity);
-      if (isNaN(qty)) {
-        // Try to handle string numbers with commas
-        qty = parseFloat(String(item.orderQuantity).replace(/,/g, ""));
-      }
-
-      if (isNaN(qty)) {
-        return item; // If still not a number, return original item
-      }
-
-      // Define unit variations
-      const lbsVariations = [
-        "lbs",
-        "lb",
-        "pound",
-        "pounds",
-        "lbs.",
-        "pound(s)",
-      ];
-      const tonVariations = ["ton", "tons", "metric ton", "metric tons"];
-
-      // Condition 1: Convert LBS to KG
-      if (lbsVariations.includes(unit)) {
-        // Convert LBS to KG (1 lb = 0.45359237 kg)
-        const convertedQty = qty * 0.45359237;
-
-        return {
-          ...item,
-          orderQuantity: parseFloat(convertedQty.toFixed(2)), // Keep 2 decimal places
-          unitOfMeasure: "KG",
-        };
-      }
-      // Condition 2: Change Tons to TO (No quantity conversion)
-      else if (tonVariations.includes(unit)) {
-        return {
-          ...item,
-          // Quantity remains the same
-          unitOfMeasure: "TO",
-        };
-      }
-      // Condition 3: All other units default to KG
-      else {
-        return {
-          ...item,
-          unitOfMeasure: "KG",
-        };
-      }
-    });
+    data = postProcessExtraction(data);
 
     return { data, usage };
   } catch (error) {
