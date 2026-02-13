@@ -19,16 +19,26 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
 }) => {
   const [isApiModalOpen, setIsApiModalOpen] = React.useState(false);
   const [apiUrl, setApiUrl] = React.useState("");
+  const [apiToken, setApiToken] = React.useState("");
   const [isSaving, setIsSaving] = React.useState(false);
   const [copySuccess, setCopySuccess] = React.useState(false);
+  const [copyTokenSuccess, setCopyTokenSuccess] = React.useState(false);
 
   const handleApiClick = async () => {
     setIsSaving(true);
     try {
       await resultsService.saveResults(data);
-      setApiUrl(resultsService.getResultsUrl());
+      const url = resultsService.getResultsUrl();
+      setApiUrl(url);
+
+      // Extract token from URL if possible, otherwise get from service
+      const urlObj = new URL(url);
+      const token = urlObj.searchParams.get("wms_session_token") || "";
+      setApiToken(token);
+
       setIsApiModalOpen(true);
       setCopySuccess(false);
+      setCopyTokenSuccess(false);
     } catch (error) {
       console.error("Failed to save results:", error);
       alert("Failed to generate API URL. Please try again.");
@@ -41,6 +51,12 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
     navigator.clipboard.writeText(apiUrl);
     setCopySuccess(true);
     setTimeout(() => setCopySuccess(false), 2000);
+  };
+
+  const handleCopyToken = () => {
+    navigator.clipboard.writeText(apiToken);
+    setCopyTokenSuccess(true);
+    setTimeout(() => setCopyTokenSuccess(false), 2000);
   };
 
   if (data.length === 0) {
@@ -167,53 +183,108 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                 </svg>
               </button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-6">
               <p className="text-sm text-slate-600">
-                This URL provides access to the current table data. It remains
-                valid until you log out or the session expires (24h).
+                Access the current table data via the RESTful API using the URL
+                or the session token below.
               </p>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={apiUrl}
-                  readOnly
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 pl-4 pr-12 text-sm text-slate-700 font-mono focus:ring-2 focus:ring-apple-blue/20 focus:border-apple-blue transition-all"
-                />
-                <button
-                  onClick={handleCopyUrl}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-apple-blue transition-colors rounded-md hover:bg-blue-50"
-                  title="Copy to clipboard"
-                >
-                  {copySuccess ? (
-                    <svg
-                      className="w-5 h-5 text-green-500"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-                      />
-                    </svg>
-                  )}
-                </button>
+
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-apple-subtext uppercase tracking-wider ml-1">
+                  Full API URL
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={apiUrl}
+                    readOnly
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 pl-4 pr-12 text-sm text-slate-700 font-mono focus:ring-2 focus:ring-apple-blue/20 focus:border-apple-blue transition-all"
+                  />
+                  <button
+                    onClick={handleCopyUrl}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-apple-blue transition-colors rounded-md hover:bg-blue-50"
+                    title="Copy URL"
+                  >
+                    {copySuccess ? (
+                      <svg
+                        className="w-5 h-5 text-green-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-apple-subtext uppercase tracking-wider ml-1">
+                  Session Token
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={apiToken}
+                    readOnly
+                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 pl-4 pr-12 text-sm text-slate-700 font-mono focus:ring-2 focus:ring-apple-blue/20 focus:border-apple-blue transition-all"
+                  />
+                  <button
+                    onClick={handleCopyToken}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-apple-blue transition-colors rounded-md hover:bg-blue-50"
+                    title="Copy Token"
+                  >
+                    {copyTokenSuccess ? (
+                      <svg
+                        className="w-5 h-5 text-green-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
             <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end">
