@@ -4,9 +4,16 @@ import { User } from "../types";
 interface HeaderProps {
   user: User;
   onLogout: () => void;
+  onNavigate?: (view: "dashboard" | "customer-master") => void;
+  currentView?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
+export const Header: React.FC<HeaderProps> = ({
+  user,
+  onLogout,
+  onNavigate,
+  currentView,
+}) => {
   return (
     <nav className="bg-white/70 border-b border-slate-200/50 sticky top-0 z-30 backdrop-blur-xl">
       <div className="max-w-[98%] mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,9 +31,37 @@ export const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                 />
               </svg>
             </div>
-            <span className="font-semibold text-lg text-apple-text tracking-tight">
+            <span
+              className="font-semibold text-lg text-apple-text tracking-tight cursor-pointer"
+              onClick={() => onNavigate?.("dashboard")}
+            >
               PO Extractor
             </span>
+
+            {user.role === "admin" && onNavigate && (
+              <div className="hidden md:flex ml-8 space-x-4">
+                <button
+                  onClick={() => onNavigate("dashboard")}
+                  className={`text-sm font-medium transition-colors ${
+                    currentView === "dashboard"
+                      ? "text-apple-blue"
+                      : "text-slate-500 hover:text-apple-text"
+                  }`}
+                >
+                  Dashboard
+                </button>
+                <button
+                  onClick={() => onNavigate("customer-master")}
+                  className={`text-sm font-medium transition-colors ${
+                    currentView === "customer-master"
+                      ? "text-apple-blue"
+                      : "text-slate-500 hover:text-apple-text"
+                  }`}
+                >
+                  Customer Master
+                </button>
+              </div>
+            )}
           </div>
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-3">

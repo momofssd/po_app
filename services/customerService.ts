@@ -61,4 +61,52 @@ export const customerService = {
       return [];
     }
   },
+
+  createCustomer: async (customer: Partial<Customer>): Promise<Customer> => {
+    const response = await fetch(`${API_BASE_URL}/customers`, {
+      method: "POST",
+      headers: {
+        ...authService.getAuthHeaders(),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(customer),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create customer");
+    }
+
+    return await response.json();
+  },
+
+  updateCustomer: async (
+    id: string,
+    customer: Partial<Customer>,
+  ): Promise<Customer> => {
+    const response = await fetch(`${API_BASE_URL}/customers/${id}`, {
+      method: "PUT",
+      headers: {
+        ...authService.getAuthHeaders(),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(customer),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update customer");
+    }
+
+    return await response.json();
+  },
+
+  deleteCustomer: async (id: string): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/customers/${id}`, {
+      method: "DELETE",
+      headers: authService.getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete customer");
+    }
+  },
 };

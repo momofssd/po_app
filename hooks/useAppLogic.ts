@@ -26,6 +26,9 @@ export const useAppLogic = () => {
     string | null
   >(null);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [currentView, setCurrentView] = useState<
+    "dashboard" | "customer-master"
+  >("dashboard");
 
   // Check for existing session
   useEffect(() => {
@@ -215,5 +218,7 @@ export const useAppLogic = () => {
     clearQueue,
     handleDataUpdate,
     handleStartProcessing,
+    currentView,
+    setCurrentView,
   };
 };

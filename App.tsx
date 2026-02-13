@@ -1,4 +1,5 @@
 import React from "react";
+import { CustomerMaster } from "./components/CustomerMaster";
 import { DashboardResults } from "./components/DashboardResults";
 import { DashboardSidebar } from "./components/DashboardSidebar";
 import { Footer } from "./components/Footer";
@@ -24,6 +25,8 @@ const App: React.FC = () => {
     clearQueue,
     handleDataUpdate,
     handleStartProcessing,
+    currentView,
+    setCurrentView,
   } = useAppLogic();
 
   if (isInitializing) {
@@ -36,29 +39,38 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-apple-bg font-sans text-apple-text selection:bg-apple-blue selection:text-white">
-      <Header user={user} onLogout={handleLogout} />
+      <Header
+        user={user}
+        onLogout={handleLogout}
+        onNavigate={setCurrentView}
+        currentView={currentView}
+      />
 
       <div className="flex-grow w-full max-w-[98%] mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <DashboardSidebar
-            status={status}
-            fileQueue={fileQueue}
-            processedCount={processedCount}
-            currentProcessingFile={currentProcessingFile}
-            error={error}
-            onFilesSelect={handleFilesSelect}
-            onRemoveFile={removeFileFromQueue}
-            onClearQueue={clearQueue}
-            onStartProcessing={handleStartProcessing}
-          />
+        {currentView === "dashboard" ? (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <DashboardSidebar
+              status={status}
+              fileQueue={fileQueue}
+              processedCount={processedCount}
+              currentProcessingFile={currentProcessingFile}
+              error={error}
+              onFilesSelect={handleFilesSelect}
+              onRemoveFile={removeFileFromQueue}
+              onClearQueue={clearQueue}
+              onStartProcessing={handleStartProcessing}
+            />
 
-          <DashboardResults
-            status={status}
-            data={data}
-            tokenUsage={tokenUsage}
-            onUpdate={handleDataUpdate}
-          />
-        </div>
+            <DashboardResults
+              status={status}
+              data={data}
+              tokenUsage={tokenUsage}
+              onUpdate={handleDataUpdate}
+            />
+          </div>
+        ) : (
+          <CustomerMaster onBack={() => setCurrentView("dashboard")} />
+        )}
       </div>
 
       <Footer />
