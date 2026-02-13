@@ -58,16 +58,13 @@ const App: React.FC = () => {
     if (!isResizing.current || !containerRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
-    const gapWidth = 32; // 8 * 4px (gap-8)
-    const availableWidth = containerRect.width - gapWidth;
-    const mouseXInContainer = e.clientX - containerRect.left;
     const rightPanelPx = containerRect.right - e.clientX;
-    const newWidth = (rightPanelPx / containerRect.width) * 100;
+    let newWidth = (rightPanelPx / containerRect.width) * 100;
 
     // Constraints: Right panel between 40% and 85%
-    if (newWidth >= 40 && newWidth <= 85) {
-      setRightPanelWidth(newWidth);
-    }
+    // This ensures the drag bar doesn't move into the left panel's minimum space
+    newWidth = Math.max(40, Math.min(85, newWidth));
+    setRightPanelWidth(newWidth);
   }, []);
 
   useEffect(() => {
@@ -103,7 +100,7 @@ const App: React.FC = () => {
             className="flex flex-col lg:flex-row gap-8 relative"
           >
             <div
-              className="w-full lg:w-auto"
+              className="w-full lg:w-auto overflow-hidden min-w-0"
               style={{
                 flex: isLg
                   ? `0 0 calc(${100 - rightPanelWidth}% - 1rem)`
