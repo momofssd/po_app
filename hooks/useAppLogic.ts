@@ -122,6 +122,7 @@ export const useAppLogic = () => {
           extractedLines.map(async (line) => {
             let soldTo = "";
             let shipTo = "";
+            let salesOrg = line.salesOrg || "";
 
             if (line.customerName) {
               try {
@@ -147,18 +148,24 @@ export const useAppLogic = () => {
                   if (soldToId) {
                     soldTo = soldToId;
 
-                    // 3. Determine Ship To
+                    // 3. Determine Ship To & Sales Org
                     const customer =
                       candidates.find((c) => c.customer_id === soldToId) ||
                       candidates.find((c) => c._id === soldToId); // Check both just in case
 
-                    if (customer && customer.ship_to && line.deliveryAddress) {
-                      const shipToKey = await determineShipTo(
-                        line.deliveryAddress,
-                        customer.ship_to,
-                      );
-                      if (shipToKey) {
-                        shipTo = shipToKey;
+                    if (customer) {
+                      if (customer.sales_org) {
+                        salesOrg = customer.sales_org;
+                      }
+
+                      if (customer.ship_to && line.deliveryAddress) {
+                        const shipToKey = await determineShipTo(
+                          line.deliveryAddress,
+                          customer.ship_to,
+                        );
+                        if (shipToKey) {
+                          shipTo = shipToKey;
+                        }
                       }
                     }
                   }
@@ -172,6 +179,7 @@ export const useAppLogic = () => {
               ...line,
               soldTo,
               shipTo,
+              salesOrg,
             };
           }),
         );

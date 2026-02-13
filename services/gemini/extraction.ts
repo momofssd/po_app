@@ -20,6 +20,7 @@ const poResponseSchema: Schema = {
     properties: {
       customerName: { type: Type.STRING },
       purchaseOrderNumber: { type: Type.STRING },
+      salesOrg: { type: Type.STRING },
       requiredDeliveryDate: { type: Type.STRING },
       materialNumber: { type: Type.STRING },
       orderQuantity: { type: Type.NUMBER },
@@ -29,6 +30,7 @@ const poResponseSchema: Schema = {
     required: [
       "customerName",
       "purchaseOrderNumber",
+      "salesOrg",
       "requiredDeliveryDate",
       "materialNumber",
       "orderQuantity",

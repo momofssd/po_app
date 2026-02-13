@@ -1,4 +1,3 @@
-
 export const PO_PROMPT = `
 You are analyzing a purchase order document. If the document includes multiple lines with repeated quantities, material numbers, and different delivery dates, treat each line as a separate purchase order line.
 Each line must be extracted and output as a separate flat JSON object in a JSON array.

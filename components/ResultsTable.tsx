@@ -234,6 +234,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
             <tr>
               {[
                 { label: "Source", width: "w-24" },
+                { label: "Sales Org", width: "w-32" },
                 { label: "PO #", width: "w-32" },
                 { label: "Customer", width: "w-48" },
                 { label: "Sold To", width: "w-32" },
@@ -275,6 +276,19 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                       row.sourceFile || "-"
                     )}
                   </div>
+                </td>
+
+                {/* Editable Sales Org */}
+                <td className="px-2 py-3 align-top">
+                  <input
+                    type="text"
+                    value={row.salesOrg || ""}
+                    onChange={(e) =>
+                      onUpdate(index, "salesOrg", e.target.value)
+                    }
+                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-apple-blue focus:ring-1 focus:ring-apple-blue/20 rounded-lg px-2 py-1.5 text-sm text-apple-text font-mono transition-all"
+                    placeholder="-"
+                  />
                 </td>
 
                 {/* Editable PO Number */}

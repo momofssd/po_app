@@ -5,6 +5,7 @@ export interface PurchaseOrderLine {
   soldTo?: string;
   shipTo?: string;
   purchaseOrderNumber: string;
+  salesOrg?: string;
   requiredDeliveryDate: string;
   materialNumber: string;
   orderQuantity: string | number;
