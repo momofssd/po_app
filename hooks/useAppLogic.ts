@@ -7,6 +7,7 @@ import {
   extractDataFromImages,
 } from "../services/geminiService";
 import { convertPdfToImages } from "../services/pdfService";
+import { resultsService } from "../services/resultsService";
 import { ProcessingStatus, PurchaseOrderLine, User } from "../types";
 
 export const useAppLogic = () => {
@@ -39,7 +40,12 @@ export const useAppLogic = () => {
     setUser(loggedInUser);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await resultsService.clearResults();
+    } catch (e) {
+      console.error("Failed to clear results on logout", e);
+    }
     authService.logout();
     setUser(null);
   };

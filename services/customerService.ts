@@ -1,4 +1,5 @@
 import { Customer } from "../types";
+import { authService } from "./authService";
 
 // Assuming running locally on port 3001
 const API_BASE_URL = "http://localhost:3001/api";
@@ -15,7 +16,15 @@ export const customerService = {
         `${API_BASE_URL}/customers/search?q=${encodeURIComponent(
           query,
         )}&limit=${limitParam}`,
+        {
+          headers: authService.getAuthHeaders(),
+        },
       );
+
+      if (response.status === 401) {
+        authService.logout();
+        return [];
+      }
 
       if (!response.ok) {
         throw new Error("Failed to fetch customers");
@@ -32,7 +41,15 @@ export const customerService = {
     try {
       const response = await fetch(
         `${API_BASE_URL}/customers/search?limit=none`,
+        {
+          headers: authService.getAuthHeaders(),
+        },
       );
+
+      if (response.status === 401) {
+        authService.logout();
+        return [];
+      }
 
       if (!response.ok) {
         throw new Error("Failed to fetch all customers");

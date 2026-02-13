@@ -64,7 +64,7 @@ export const CustomerSelector: React.FC = () => {
 
   return (
     <div
-      className="bg-apple-card rounded-3xl shadow-apple border border-white/50 p-8 backdrop-blur-xl"
+      className="relative z-20 bg-apple-card rounded-3xl shadow-apple border border-white/50 p-8 backdrop-blur-xl"
       ref={wrapperRef}
     >
       <h2 className="text-xl font-semibold text-apple-text mb-6 flex items-center tracking-tight">
@@ -268,13 +268,7 @@ export const CustomerSelector: React.FC = () => {
             </div>
           </div>
         </div>
-      ) : (
-        <div className="text-center py-8 border-2 border-dashed border-slate-200/60 rounded-2xl bg-slate-50/30">
-          <p className="text-sm text-apple-subtext font-medium">
-            Search to view Customer Master data
-          </p>
-        </div>
-      )}
+      ) : null}
     </div>
   );
 };

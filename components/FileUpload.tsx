@@ -62,7 +62,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={`
-        group relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300 ease-out
+        group relative border-2 border-dashed rounded-2xl p-5 text-center transition-all duration-300 ease-out
         ${
           isDragging
             ? "border-apple-blue bg-blue-50/30 scale-[1.01] shadow-xl shadow-blue-100/50"
@@ -80,15 +80,15 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         disabled={disabled}
       />
 
-      <div className="flex flex-col items-center justify-center space-y-4 relative">
+      <div className="flex flex-col items-center justify-center space-y-2 relative">
         <div
           className={`
-          p-4 rounded-full transition-all duration-300
+          p-3 rounded-full transition-all duration-300
           ${isDragging ? "bg-blue-100 text-apple-blue" : "bg-white text-apple-subtext group-hover:bg-blue-50 group-hover:text-apple-blue shadow-sm"}
         `}
         >
           <svg
-            className="w-8 h-8"
+            className="w-6 h-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

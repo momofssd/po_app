@@ -1,8 +1,9 @@
-import { User } from '../types';
+import { User } from "../types";
 
-const SESSION_COOKIE_NAME = 'wms_session_user';
+const STORAGE_KEY_USER = "wms_session_user";
+const STORAGE_KEY_TOKEN = "wms_session_token";
 // Using localhost. If this fails on some systems, try http://127.0.0.1:3001
-const API_URL = 'http://localhost:3001/api/login';
+const API_URL = "http://localhost:3001/api/login";
 
 export const authService = {
   login: async (username: string, password: string): Promise<User> => {
@@ -12,12 +13,12 @@ export const authService = {
       const timeoutId = setTimeout(() => controller.abort(), 3000); // Short timeout for dev fallback
 
       const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json' 
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
-        signal: controller.signal
+        signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
@@ -25,29 +26,36 @@ export const authService = {
       if (!response.ok) {
         // Try to parse JSON error from server
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `Login failed: ${response.statusText}`);
+        throw new Error(
+          errorData.message || `Login failed: ${response.statusText}`,
+        );
       }
 
-      const user = await response.json();
-      authService.setSession(user);
-      return user;
+      const data = await response.json();
+      const user: User = { username: data.username, role: data.role };
+      const token = data.token;
 
+      authService.setSession(user, token);
+      return user;
     } catch (error: any) {
       console.warn("Backend connection failed. Attempting Dev Mode fallback.");
 
       // DEV MODE FALLBACK
       // If the backend is not running (common in web previews), allow 'admin'/'password'
       if (
-        (error.name === 'AbortError' || 
-         error.message.includes('Network error') || 
-         error.message.includes('Failed to fetch'))
+        error.name === "AbortError" ||
+        error.message.includes("Network error") ||
+        error.message.includes("Failed to fetch")
       ) {
-        if (username.toLowerCase() === 'admin' && password === 'password') {
-          const demoUser: User = { username: 'admin', role: 'admin' };
-          authService.setSession(demoUser);
+        if (username.toLowerCase() === "admin" && password === "password") {
+          const demoUser: User = { username: "admin", role: "admin" };
+          // No token in dev fallback, or mock one
+          authService.setSession(demoUser, "demo-token");
           return demoUser;
         } else {
-           throw new Error("Backend unavailable. For testing, use demo credentials: admin / password");
+          throw new Error(
+            "Backend unavailable. For testing, use demo credentials: admin / password",
+          );
         }
       }
 
@@ -57,31 +65,35 @@ export const authService = {
   },
 
   logout: () => {
-    document.cookie = `${SESSION_COOKIE_NAME}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+    localStorage.removeItem(STORAGE_KEY_USER);
+    localStorage.removeItem(STORAGE_KEY_TOKEN);
     window.location.reload();
   },
 
-  setSession: (user: User) => {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000)); // 1 day
-    const cookieValue = JSON.stringify(user);
-    document.cookie = `${SESSION_COOKIE_NAME}=${encodeURIComponent(cookieValue)};expires=${expires.toUTCString()};path=/`;
+  setSession: (user: User, token?: string) => {
+    localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
+    if (token) {
+      localStorage.setItem(STORAGE_KEY_TOKEN, token);
+    }
   },
 
   getSession: (): User | null => {
-    const nameEQ = SESSION_COOKIE_NAME + "=";
-    const ca = document.cookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-      if (c.indexOf(nameEQ) === 0) {
-        try {
-          return JSON.parse(decodeURIComponent(c.substring(nameEQ.length)));
-        } catch (e) {
-          return null;
-        }
-      }
+    const userStr = localStorage.getItem(STORAGE_KEY_USER);
+    if (!userStr) return null;
+    try {
+      return JSON.parse(userStr);
+    } catch (e) {
+      return null;
     }
-    return null;
-  }
+  },
+
+  getToken: (): string | null => {
+    return localStorage.getItem(STORAGE_KEY_TOKEN);
+  },
+
+  // Helper to get headers with Auth
+  getAuthHeaders: (): HeadersInit => {
+    const token = localStorage.getItem(STORAGE_KEY_TOKEN);
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  },
 };

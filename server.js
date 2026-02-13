@@ -4,6 +4,7 @@ import express from "express";
 import { connectDB } from "./backend/config/db.js";
 import authRoutes from "./backend/routes/auth.js";
 import customerRoutes from "./backend/routes/customers.js";
+import resultsRoutes from "./backend/routes/results.js";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 // Routes
 app.use("/api", authRoutes);
 app.use("/api/customers", customerRoutes);
+app.use("/api/results", resultsRoutes);
 
 // START SERVER IMMEDIATELY
 app.listen(port, () => {

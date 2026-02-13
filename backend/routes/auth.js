@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import express from "express";
+import jwt from "jsonwebtoken";
 import { getCollection } from "../config/db.js";
 
 const router = express.Router();
@@ -34,10 +35,18 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid username or password" });
     }
 
-    // Return user info
+    // Generate JWT token
+    const token = jwt.sign(
+      { username: user.username, role: user.role },
+      process.env.JWT_SEC,
+      { expiresIn: "24h" },
+    );
+
+    // Return user info and token
     res.json({
       username: user.username,
       role: user.role,
+      token,
     });
   } catch (error) {
     console.error("Login error:", error);

@@ -1,9 +1,10 @@
 import express from "express";
 import { getCollection } from "../config/db.js";
+import { authenticateToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/search", async (req, res) => {
+router.get("/search", authenticateToken, async (req, res) => {
   const customerMasterCollection = getCollection("customer_master");
   if (!customerMasterCollection) {
     return res.status(503).json({ message: "Database not connected yet." });
