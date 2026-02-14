@@ -10,6 +10,9 @@ export async function generateWithRetry(
 
   while (true) {
     try {
+      if (params.model) {
+        console.log(`[Gemini] model: "${params.model}"`);
+      }
       return await ai.models.generateContent(params);
     } catch (error: any) {
       // Check if it's a quota/rate-limit error (429) or temporary server error (503)
