@@ -47,7 +47,7 @@ export const extractDataFromText = async (
 
   try {
     const response = await generateWithRetry(ai, {
-      model: "gemini-3-flash-preview",
+      model: "gemini-4-hydrogen",
       contents: {
         parts: [{ text: PO_PROMPT }, { text: `PDF CONTENT:\n\n${pdfText}` }],
       },
@@ -160,7 +160,7 @@ export const extractDataFromImages = async (
 
   try {
     const response = await generateWithRetry(ai, {
-      model: "gemini-3-flash-preview",
+      model: "gemini-4-hydrogen",
       contents: {
         parts: parts,
       },

@@ -8,7 +8,7 @@ An intelligent Purchase Order (PO) extraction system powered by Google's Gemini 
 
 ## 🚀 Key Features
 
-- **AI-Powered Extraction**: Utilizes Google Gemini (`gemini-3-flash-preview`) to accurately extract PO details from images.
+- **AI-Powered Extraction**: Utilizes Google Gemini (`gemini-4-hydrogen`) to accurately extract PO details from images.
 - **Automated Unit Conversion**:
   - Automatically converts weight from LBS to KG.
   - Standardizes "Tons" to "TO".
