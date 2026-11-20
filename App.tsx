@@ -77,7 +77,7 @@ const App: React.FC = () => {
   }, [resize, stopResizing]);
 
   if (isInitializing) {
-    return <div className="min-h-screen bg-[#f8fafc]"></div>; // Prevent flash
+    return <div className="min-h-screen bg-brand-bg"></div>; // Prevent flash
   }
 
   if (!user) {
@@ -85,7 +85,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-apple-bg font-sans text-apple-text selection:bg-apple-blue selection:text-white">
+    <div className="min-h-screen flex flex-col bg-brand-bg font-sans text-brand-text selection:bg-primary-100 selection:text-brand-text">
       <Header
         user={user}
         onLogout={handleLogout}
@@ -128,11 +128,11 @@ const App: React.FC = () => {
               style={{ left: `calc(${100 - rightPanelWidth}% + 1rem)` }}
               onMouseDown={startResizing}
             >
-              <div className="h-full w-[2px] bg-apple-blue/10 group-hover:bg-apple-blue/40 transition-colors mx-auto relative">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-10 bg-white border border-apple-blue/20 rounded-lg shadow-sm flex items-center justify-center group-hover:border-apple-blue/40 transition-all">
+              <div className="h-full w-[2px] bg-brand-primary/10 group-hover:bg-brand-primary/40 transition-colors mx-auto relative">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-10 bg-white border border-brand-primary/20 rounded-lg shadow-sm flex items-center justify-center group-hover:border-brand-primary/40 transition-all">
                   <div className="flex gap-[2px]">
-                    <div className="w-1 h-4 bg-apple-blue/20 rounded-full group-hover:bg-apple-blue/40" />
-                    <div className="w-1 h-4 bg-apple-blue/20 rounded-full group-hover:bg-apple-blue/40" />
+                    <div className="w-1 h-4 bg-brand-primary/20 rounded-full group-hover:bg-brand-primary/40" />
+                    <div className="w-1 h-4 bg-brand-primary/20 rounded-full group-hover:bg-brand-primary/40" />
                   </div>
                 </div>
               </div>

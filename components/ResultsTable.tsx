@@ -61,7 +61,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
 
   if (data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full min-h-[400px] text-center text-apple-subtext bg-white/50 rounded-3xl border border-dashed border-slate-200/60 backdrop-blur-sm">
+      <div className="flex items-center justify-center h-full min-h-[400px] text-center text-brand-subtext bg-white/50 rounded-3xl border border-dashed border-neutral-200/60 backdrop-blur-sm">
         <div className="space-y-2">
           <p className="font-medium text-lg">No Data Available</p>
           <p className="text-sm opacity-70">
@@ -73,20 +73,20 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
   }
 
   return (
-    <div className="w-full bg-white rounded-3xl shadow-apple border border-white/50 flex flex-col h-full overflow-hidden backdrop-blur-xl">
-      <div className="px-8 py-6 border-b border-slate-100 bg-white/80 flex justify-between items-center sticky top-0 z-20 backdrop-blur-md">
+    <div className="w-full bg-white rounded-3xl shadow-brand border border-brand-border flex flex-col h-full overflow-hidden backdrop-blur-xl">
+      <div className="px-8 py-6 border-b border-neutral-100 bg-white/80 flex justify-between items-center sticky top-0 z-20 backdrop-blur-md">
         <div className="flex items-center space-x-4">
-          <div className="h-8 w-1.5 bg-apple-blue rounded-full shadow-sm shadow-blue-200"></div>
-          <h3 className="text-xl font-semibold text-apple-text tracking-tight">
+          <div className="h-8 w-1.5 bg-brand-primary rounded-full shadow-sm"></div>
+          <h3 className="text-xl font-semibold text-brand-text tracking-tight">
             Extracted Line Items{" "}
-            <span className="ml-3 text-xs py-1 px-2.5 bg-blue-50 text-apple-blue rounded-full font-medium border border-blue-100">
+            <span className="ml-3 text-xs py-1 px-2.5 bg-primary-50 text-brand-primary rounded-full font-medium border border-primary-100">
               {data.length}
             </span>
           </h3>
           {tokenUsage && tokenUsage.totalTokens > 0 && (
-            <div className="ml-4 px-3 py-1 bg-slate-50 border border-slate-200/50 rounded-lg flex items-center space-x-2">
+            <div className="ml-4 px-3 py-1 bg-neutral-50 border border-neutral-200/50 rounded-lg flex items-center space-x-2">
               <svg
-                className="w-3.5 h-3.5 text-apple-subtext"
+                className="w-3.5 h-3.5 text-brand-subtext"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -98,7 +98,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                   d="M13 10V3L4 14h7v7l9-11h-7z"
                 />
               </svg>
-              <span className="text-xs font-medium text-apple-subtext">
+              <span className="text-xs font-medium text-brand-subtext">
                 {tokenUsage.totalTokens.toLocaleString()} tokens
               </span>
             </div>
@@ -108,7 +108,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
           <button
             onClick={handleApiClick}
             disabled={isSaving}
-            className={`flex items-center space-x-2 text-sm text-apple-blue bg-blue-50 hover:bg-blue-100 active:scale-[0.98] py-2.5 px-5 rounded-full font-medium border border-blue-200 shadow-sm transition-all duration-200 ${
+            className={`flex items-center space-x-2 text-sm text-brand-primary bg-primary-50 hover:bg-primary-100 active:scale-[0.98] py-2.5 px-5 rounded-full font-medium border border-primary-200 shadow-sm transition-all duration-200 ${
               isSaving ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >
@@ -137,7 +137,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
               link.download = "purchase_orders.json";
               link.click();
             }}
-            className="flex items-center space-x-2 text-sm text-white bg-apple-blue hover:bg-apple-blueHover active:scale-[0.98] py-2.5 px-5 rounded-full font-medium shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-200"
+            className="flex items-center space-x-2 text-sm text-white bg-brand-primary hover:bg-brand-primaryHover active:scale-[0.98] py-2.5 px-5 rounded-full font-medium shadow-sm transition-all duration-200"
           >
             <svg
               className="w-4 h-4"
@@ -159,14 +159,14 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
 
       {isApiModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-white/50 animate-fadeIn">
-            <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-              <h3 className="text-lg font-semibold text-apple-text">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-brand-border animate-fadeIn">
+            <div className="px-6 py-4 border-b border-neutral-100 flex justify-between items-center bg-neutral-50/50">
+              <h3 className="text-lg font-semibold text-brand-text">
                 API Restful URL
               </h3>
               <button
                 onClick={() => setIsApiModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors"
+                className="text-neutral-400 hover:text-neutral-600 transition-colors"
               >
                 <svg
                   className="w-5 h-5"
@@ -184,13 +184,13 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
               </button>
             </div>
             <div className="p-6 space-y-6">
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-neutral-600">
                 Access the current table data via the RESTful API using the URL
                 or the session token below.
               </p>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-apple-subtext uppercase tracking-wider ml-1">
+                <label className="text-xs font-semibold text-brand-subtext uppercase tracking-wider ml-1">
                   Full API URL
                 </label>
                 <div className="relative">
@@ -198,11 +198,11 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     type="text"
                     value={apiUrl}
                     readOnly
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 pl-4 pr-12 text-sm text-slate-700 font-mono focus:ring-2 focus:ring-apple-blue/20 focus:border-apple-blue transition-all"
+                    className="w-full bg-neutral-50 border border-neutral-200 rounded-lg py-3 pl-4 pr-12 text-sm text-neutral-700 font-mono focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                   />
                   <button
                     onClick={handleCopyUrl}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-apple-blue transition-colors rounded-md hover:bg-blue-50"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-neutral-400 hover:text-brand-primary transition-colors rounded-md hover:bg-primary-50"
                     title="Copy URL"
                   >
                     {copySuccess ? (
@@ -239,7 +239,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-apple-subtext uppercase tracking-wider ml-1">
+                <label className="text-xs font-semibold text-brand-subtext uppercase tracking-wider ml-1">
                   Session Token
                 </label>
                 <div className="relative">
@@ -247,11 +247,11 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     type="text"
                     value={apiToken}
                     readOnly
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 pl-4 pr-12 text-sm text-slate-700 font-mono focus:ring-2 focus:ring-apple-blue/20 focus:border-apple-blue transition-all"
+                    className="w-full bg-neutral-50 border border-neutral-200 rounded-lg py-3 pl-4 pr-12 text-sm text-neutral-700 font-mono focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                   />
                   <button
                     onClick={handleCopyToken}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-apple-blue transition-colors rounded-md hover:bg-blue-50"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-neutral-400 hover:text-brand-primary transition-colors rounded-md hover:bg-primary-50"
                     title="Copy Token"
                   >
                     {copyTokenSuccess ? (
@@ -287,10 +287,10 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                 </div>
               </div>
             </div>
-            <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+            <div className="px-6 py-4 bg-neutral-50 border-t border-neutral-100 flex justify-end">
               <button
                 onClick={() => setIsApiModalOpen(false)}
-                className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors shadow-sm"
+                className="px-4 py-2 bg-white border border-neutral-200 text-neutral-700 rounded-lg text-sm font-medium hover:bg-neutral-50 transition-colors shadow-sm"
               >
                 Close
               </button>
@@ -300,8 +300,8 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
       )}
 
       <div className="overflow-auto flex-1 custom-scrollbar">
-        <table className="min-w-full divide-y divide-slate-100 table-fixed">
-          <thead className="bg-slate-50/80 sticky top-0 z-10 backdrop-blur-sm">
+        <table className="min-w-full divide-y divide-neutral-100 table-fixed">
+          <thead className="bg-neutral-50/80 sticky top-0 z-10 backdrop-blur-sm">
             <tr>
               {[
                 { label: "Source", width: "w-24" },
@@ -319,27 +319,27 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                 <th
                   key={header.label}
                   scope="col"
-                  className={`px-4 py-4 text-left text-[11px] font-semibold text-apple-subtext uppercase tracking-widest ${header.width}`}
+                  className={`px-4 py-4 text-left text-[11px] font-semibold text-brand-subtext uppercase tracking-widest ${header.width}`}
                 >
                   {header.label}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white/40 divide-y divide-slate-100">
+          <tbody className="bg-white/40 divide-y divide-neutral-100">
             {data.map((row, index) => (
               <tr
                 key={index}
-                className="hover:bg-blue-50/30 transition-colors group"
+                className="hover:bg-primary-50/30 transition-colors group"
               >
                 <td className="px-4 py-4 align-top">
-                  <div className="text-[10px] text-apple-subtext font-mono break-all leading-tight border-l-2 border-transparent group-hover:border-apple-blue pl-2 transition-colors">
+                  <div className="text-[10px] text-brand-subtext font-mono break-all leading-tight border-l-2 border-transparent group-hover:border-brand-primary pl-2 transition-colors">
                     {row.sourceUrl ? (
                       <a
                         href={row.sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-apple-blue hover:underline cursor-pointer transition-colors"
+                        className="hover:text-brand-primary hover:underline cursor-pointer transition-colors"
                       >
                         {row.sourceFile || "-"}
                       </a>
@@ -357,7 +357,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     onChange={(e) =>
                       onUpdate(index, "salesOrg", e.target.value)
                     }
-                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-apple-blue focus:ring-1 focus:ring-apple-blue/20 rounded-lg px-2 py-1.5 text-sm text-apple-text font-mono transition-all"
+                    className="w-full bg-transparent border border-transparent hover:border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-lg px-2 py-1.5 text-sm text-brand-text font-mono transition-all"
                     placeholder="-"
                   />
                 </td>
@@ -370,7 +370,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     onChange={(e) =>
                       onUpdate(index, "purchaseOrderNumber", e.target.value)
                     }
-                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-apple-blue focus:ring-1 focus:ring-apple-blue/20 rounded-lg px-2 py-1.5 text-sm font-semibold text-apple-text transition-all"
+                    className="w-full bg-transparent border border-transparent hover:border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-lg px-2 py-1.5 text-sm font-semibold text-brand-text transition-all"
                   />
                 </td>
 
@@ -382,7 +382,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     onChange={(e) =>
                       onUpdate(index, "customerName", e.target.value)
                     }
-                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-apple-blue focus:ring-1 focus:ring-apple-blue/20 rounded-lg px-2 py-1.5 text-sm text-apple-text transition-all resize-none overflow-hidden leading-relaxed"
+                    className="w-full bg-transparent border border-transparent hover:border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-lg px-2 py-1.5 text-sm text-brand-text transition-all resize-none overflow-hidden leading-relaxed"
                     onInput={(e) => {
                       const target = e.target as HTMLTextAreaElement;
                       target.style.height = "auto";
@@ -397,7 +397,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     type="text"
                     value={row.soldTo || ""}
                     onChange={(e) => onUpdate(index, "soldTo", e.target.value)}
-                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-apple-blue focus:ring-1 focus:ring-apple-blue/20 rounded-lg px-2 py-1.5 text-sm text-apple-text font-mono transition-all"
+                    className="w-full bg-transparent border border-transparent hover:border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-lg px-2 py-1.5 text-sm text-brand-text font-mono transition-all"
                     placeholder="-"
                   />
                 </td>
@@ -408,7 +408,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     type="text"
                     value={row.shipTo || ""}
                     onChange={(e) => onUpdate(index, "shipTo", e.target.value)}
-                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-apple-blue focus:ring-1 focus:ring-apple-blue/20 rounded-lg px-2 py-1.5 text-sm text-apple-text font-mono transition-all"
+                    className="w-full bg-transparent border border-transparent hover:border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-lg px-2 py-1.5 text-sm text-brand-text font-mono transition-all"
                     placeholder="-"
                   />
                 </td>
@@ -421,7 +421,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     onChange={(e) =>
                       onUpdate(index, "materialNumber", e.target.value)
                     }
-                    className="w-full bg-slate-50/50 border border-transparent hover:border-slate-200 focus:border-apple-blue focus:ring-1 focus:ring-apple-blue/20 rounded-lg px-2 py-1.5 text-sm text-slate-600 font-mono transition-all"
+                    className="w-full bg-neutral-50/50 border border-transparent hover:border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-lg px-2 py-1.5 text-sm text-neutral-600 font-mono transition-all"
                   />
                 </td>
 
@@ -433,7 +433,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     onChange={(e) =>
                       onUpdate(index, "orderQuantity", e.target.value)
                     }
-                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-apple-blue focus:ring-1 focus:ring-apple-blue/20 rounded-lg px-2 py-1.5 text-sm font-bold text-apple-text transition-all text-right pr-4"
+                    className="w-full bg-transparent border border-transparent hover:border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-lg px-2 py-1.5 text-sm font-bold text-brand-text transition-all text-right pr-4"
                   />
                 </td>
 
@@ -445,7 +445,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     onChange={(e) =>
                       onUpdate(index, "unitOfMeasure", e.target.value)
                     }
-                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-apple-blue focus:ring-1 focus:ring-apple-blue/20 rounded-lg px-2 py-1.5 text-xs font-semibold text-apple-subtext uppercase transition-all"
+                    className="w-full bg-transparent border border-transparent hover:border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-lg px-2 py-1.5 text-xs font-semibold text-brand-subtext uppercase transition-all"
                   />
                 </td>
 
@@ -457,12 +457,12 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                     onChange={(e) =>
                       onUpdate(index, "requiredDeliveryDate", e.target.value)
                     }
-                    className="w-full bg-transparent border border-transparent hover:border-slate-200 focus:border-apple-blue focus:ring-1 focus:ring-apple-blue/20 rounded-lg px-2 py-1.5 text-sm text-apple-text transition-all whitespace-nowrap"
+                    className="w-full bg-transparent border border-transparent hover:border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/20 rounded-lg px-2 py-1.5 text-sm text-brand-text transition-all whitespace-nowrap"
                   />
                 </td>
 
                 {/* Address (Read Only) */}
-                <td className="px-4 py-4 text-xs text-apple-subtext break-words leading-relaxed align-top">
+                <td className="px-4 py-4 text-xs text-brand-subtext break-words leading-relaxed align-top">
                   {row.deliveryAddress}
                 </td>
               </tr>

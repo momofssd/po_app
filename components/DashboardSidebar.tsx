@@ -36,18 +36,18 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       {/* New Customer Selector */}
       <CustomerSelector />
 
-      <div className="bg-apple-card rounded-3xl shadow-apple border border-white/50 p-8 backdrop-blur-xl">
+      <div className="bg-brand-card rounded-3xl shadow-brand border border-brand-border p-8 backdrop-blur-xl">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-apple-text tracking-tight">
+          <h2 className="text-xl font-semibold text-brand-text tracking-tight">
             Input Documents
           </h2>
-          <div className="flex bg-gray-100 p-1 rounded-xl">
+          <div className="flex bg-neutral-100 p-1 rounded-xl">
             <button
               onClick={() => onExtractionModeChange(ExtractionMode.IMAGE)}
               className={`px-3 py-1 text-xs font-medium rounded-lg transition-all ${
                 extractionMode === ExtractionMode.IMAGE
-                  ? "bg-white shadow-sm text-apple-blue"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "bg-white shadow-sm text-brand-primary"
+                  : "text-neutral-500 hover:text-neutral-700"
               }`}
             >
               Image
@@ -56,8 +56,8 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
               onClick={() => onExtractionModeChange(ExtractionMode.TEXT)}
               className={`px-3 py-1 text-xs font-medium rounded-lg transition-all ${
                 extractionMode === ExtractionMode.TEXT
-                  ? "bg-white shadow-sm text-apple-blue"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "bg-white shadow-sm text-brand-primary"
+                  : "text-neutral-500 hover:text-neutral-700"
               }`}
             >
               Text

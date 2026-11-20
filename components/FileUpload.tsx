@@ -65,10 +65,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         group relative border-2 border-dashed rounded-2xl p-5 text-center transition-all duration-300 ease-out
         ${
           isDragging
-            ? "border-apple-blue bg-blue-50/30 scale-[1.01] shadow-xl shadow-blue-100/50"
-            : "border-slate-200/60 hover:border-apple-blue/50 hover:bg-apple-bg/50 bg-slate-50/30"
+            ? "border-brand-primary bg-primary-50/30 scale-[1.01] shadow-sm"
+            : "border-neutral-200/60 hover:border-brand-primary/50 hover:bg-brand-bg/50 bg-neutral-50/30"
         }
-        ${disabled ? "opacity-50 cursor-not-allowed bg-slate-50" : "cursor-pointer"}
+        ${disabled ? "opacity-50 cursor-not-allowed bg-neutral-50" : "cursor-pointer"}
       `}
     >
       <input
@@ -84,7 +84,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         <div
           className={`
           p-3 rounded-full transition-all duration-300
-          ${isDragging ? "bg-blue-100 text-apple-blue" : "bg-white text-apple-subtext group-hover:bg-blue-50 group-hover:text-apple-blue shadow-sm"}
+          ${isDragging ? "bg-primary-100 text-brand-primary" : "bg-white text-brand-subtext group-hover:bg-primary-50 group-hover:text-brand-primary shadow-sm"}
         `}
         >
           <svg
@@ -102,12 +102,12 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           </svg>
         </div>
         <div>
-          <h3 className="text-[15px] font-medium text-apple-text group-hover:text-apple-blue transition-colors">
+          <h3 className="text-[15px] font-medium text-brand-text group-hover:text-brand-primary transition-colors">
             {isDragging ? "Drop Files Here" : "Upload Documents"}
           </h3>
-          <p className="text-xs text-apple-subtext mt-1.5 max-w-[200px] mx-auto leading-relaxed font-light">
+          <p className="text-xs text-brand-subtext mt-1.5 max-w-[200px] mx-auto leading-relaxed font-light">
             Drag PDF files here, or{" "}
-            <span className="text-apple-blue hover:underline decoration-apple-blue/30 underline-offset-2">
+            <span className="text-brand-primary hover:underline decoration-brand-primary/30 underline-offset-2">
               browse
             </span>
           </p>

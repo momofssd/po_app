@@ -2,10 +2,10 @@ import React from "react";
 
 export const EmptyResults: React.FC = () => {
   return (
-    <div className="h-full flex flex-col items-center justify-center text-apple-subtext border-2 border-dashed border-slate-200/60 rounded-3xl bg-white/30 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white p-6 rounded-3xl mb-6 shadow-sm shadow-slate-200/50">
+    <div className="h-full flex flex-col items-center justify-center text-brand-subtext border-2 border-dashed border-neutral-200/60 rounded-3xl bg-white/30 backdrop-blur-sm animate-fade-in">
+      <div className="bg-white p-6 rounded-3xl mb-6 shadow-sm shadow-neutral-200/50">
         <svg
-          className="h-12 w-12 text-apple-subtext/50"
+          className="h-12 w-12 text-brand-subtext/50"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -18,10 +18,10 @@ export const EmptyResults: React.FC = () => {
           />
         </svg>
       </div>
-      <h3 className="text-xl font-semibold text-apple-text mb-3 tracking-tight">
+      <h3 className="text-xl font-semibold text-brand-text mb-3 tracking-tight">
         Ready to Extract
       </h3>
-      <p className="text-apple-subtext max-w-sm text-center text-[15px] font-light leading-relaxed">
+      <p className="text-brand-subtext max-w-sm text-center text-[15px] font-light leading-relaxed">
         Upload your Purchase Order PDFs to automatically extract line items
         using Gemini AI.
       </p>

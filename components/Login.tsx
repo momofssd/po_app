@@ -28,11 +28,12 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-apple-bg relative overflow-hidden">
-      <div className="w-full max-w-[400px] p-6 relative z-10">
-        <div className="bg-white rounded-3xl shadow-apple border border-white/50 p-10 backdrop-blur-xl">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-apple-text text-white mb-6 shadow-xl shadow-slate-200">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-brand-bg relative overflow-hidden">
+      <div className="absolute top-0 inset-x-0 h-1 bg-brand-primary" />
+      <div className="w-full max-w-[420px] p-6 relative z-10">
+        <div className="bg-white rounded shadow-brand border border-brand-border p-10">
+          <div className="mb-8">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-50 text-brand-primary mb-5">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -48,32 +49,38 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
                 />
               </svg>
             </div>
-            <h2 className="text-2xl font-semibold text-apple-text tracking-tight">
+            <h2 className="text-[28px] font-light text-brand-text tracking-tight">
               Sign in to PO Extractor
             </h2>
-            <p className="text-[15px] text-apple-subtext mt-3 font-light">
+            <p className="text-[15px] text-brand-subtext mt-2">
               Welcome back. Please enter your details.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
+              <label className="block text-sm font-semibold text-brand-text mb-1.5">
+                Username
+              </label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3.5 rounded-xl bg-slate-50/50 border border-slate-200 text-apple-text placeholder:text-apple-subtext focus:outline-none focus:ring-2 focus:ring-apple-blue/20 focus:border-apple-blue transition-all"
+                className="w-full px-3 py-3 rounded bg-white border border-neutral-400 text-brand-text placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-primary/25 focus:border-brand-primary transition-all"
                 placeholder="Username"
                 required
               />
             </div>
 
             <div>
+              <label className="block text-sm font-semibold text-brand-text mb-1.5">
+                Password
+              </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3.5 rounded-xl bg-slate-50/50 border border-slate-200 text-apple-text placeholder:text-apple-subtext focus:outline-none focus:ring-2 focus:ring-apple-blue/20 focus:border-apple-blue transition-all"
+                className="w-full px-3 py-3 rounded bg-white border border-neutral-400 text-brand-text placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-primary/25 focus:border-brand-primary transition-all"
                 placeholder="Password"
                 required
               />
@@ -102,12 +109,12 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               type="submit"
               disabled={isLoading}
               className={`
-                w-full py-3.5 px-4 rounded-xl text-white font-medium shadow-lg shadow-blue-500/20
+                w-full py-3 px-4 rounded-full text-white font-semibold
                 transition-all duration-200 text-[15px]
                 ${
                   isLoading
-                    ? "bg-blue-400 cursor-not-allowed"
-                    : "bg-apple-blue hover:bg-apple-blueHover hover:shadow-blue-500/30 active:scale-[0.98]"
+                    ? "bg-primary-400 cursor-not-allowed"
+                    : "bg-brand-primary hover:bg-brand-primaryHover active:scale-[0.98]"
                 }
               `}
             >
@@ -141,25 +148,25 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           </form>
 
           <div className="mt-8 text-center">
-            <div className="inline-block px-4 py-3 bg-slate-50/50 border border-slate-100 rounded-xl text-xs text-apple-subtext">
-              <span className="font-semibold text-apple-text block mb-1">
+            <div className="inline-block px-4 py-3 bg-brand-bg border border-brand-border rounded text-xs text-brand-subtext">
+              <span className="font-semibold text-brand-text block mb-1">
                 Demo Credentials
               </span>
               <div className="space-x-1">
                 <span>User:</span>
-                <code className="bg-white border border-slate-200 px-1.5 py-0.5 rounded font-mono text-apple-text">
+                <code className="bg-white border border-neutral-200 px-1.5 py-0.5 rounded font-mono text-brand-text">
                   admin
                 </code>
                 <span>Pass:</span>
-                <code className="bg-white border border-slate-200 px-1.5 py-0.5 rounded font-mono text-apple-text">
+                <code className="bg-white border border-neutral-200 px-1.5 py-0.5 rounded font-mono text-brand-text">
                   password
                 </code>
               </div>
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-            <p className="text-[11px] text-apple-subtext font-medium">
+          <div className="mt-8 pt-6 border-t border-neutral-100 text-center">
+            <p className="text-[11px] text-brand-subtext font-medium">
               WMS Extraction Portal &copy; 2026
             </p>
           </div>

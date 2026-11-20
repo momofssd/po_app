@@ -157,7 +157,7 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
   if (loading && customers.length === 0) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-apple-blue"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary"></div>
       </div>
     );
   }
@@ -168,7 +168,7 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
         <div>
           <button
             onClick={onBack}
-            className="text-apple-blue hover:text-apple-blueHover text-sm font-medium flex items-center mb-2"
+            className="text-brand-primary hover:text-brand-primaryHover text-sm font-medium flex items-center mb-2"
           >
             <svg
               className="w-4 h-4 mr-1"
@@ -185,14 +185,14 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
             </svg>
             Back to Dashboard
           </button>
-          <h2 className="text-2xl font-bold text-apple-text">
+          <h2 className="text-2xl font-bold text-brand-text">
             Customer Master
           </h2>
         </div>
         {!isAdding && !editingId && (
           <button
             onClick={handleAdd}
-            className="bg-apple-blue text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-apple-blueHover transition-colors"
+            className="bg-brand-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-brand-primaryHover transition-colors"
           >
             Add New Customer
           </button>
@@ -206,11 +206,11 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
       )}
 
       {!isAdding && !editingId && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+        <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-4">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg
-                className="h-5 w-5 text-slate-400"
+                className="h-5 w-5 text-neutral-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -228,20 +228,20 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by ID, Name, Sales Org, or Ship To Count..."
-              className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-apple-blue/20 focus:border-apple-blue sm:text-sm transition-all"
+              className="block w-full pl-10 pr-3 py-2 border border-neutral-200 rounded-xl leading-5 bg-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary sm:text-sm transition-all"
             />
           </div>
         </div>
       )}
 
       {(isAdding || editingId) && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-6 space-y-4">
           <h3 className="text-lg font-semibold">
             {isAdding ? "Add New Customer" : "Edit Customer"}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1">
                 Customer ID
               </label>
               <input
@@ -250,12 +250,12 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
                 onChange={(e) =>
                   setFormData({ ...formData, customer_id: e.target.value })
                 }
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-apple-blue/20"
+                className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
                 placeholder="e.g. 10091054"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1">
                 Sales Org
               </label>
               <input
@@ -264,14 +264,14 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
                 onChange={(e) =>
                   setFormData({ ...formData, sales_org: e.target.value })
                 }
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-apple-blue/20"
+                className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
                 placeholder="e.g. 7731"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1">
               Customer Names
             </label>
             <div className="space-y-2">
@@ -281,7 +281,7 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
                     type="text"
                     value={name}
                     onChange={(e) => handleNameChange(index, e.target.value)}
-                    className="flex-grow px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-apple-blue/20"
+                    className="flex-grow px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
                   />
                   {formData.customer_names!.length > 1 && (
                     <button
@@ -295,7 +295,7 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
               ))}
               <button
                 onClick={addNameField}
-                className="text-apple-blue text-sm font-medium hover:underline"
+                className="text-brand-primary text-sm font-medium hover:underline"
               >
                 + Add Name Variant
               </button>
@@ -303,14 +303,14 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-medium text-neutral-500 uppercase tracking-wider mb-1">
               Ship To Locations
             </label>
             <div className="space-y-2 mb-3">
               {Object.entries(formData.ship_to || {}).map(([id, address]) => (
                 <div
                   key={id}
-                  className="flex items-start gap-2 bg-slate-50 p-2 rounded-lg"
+                  className="flex items-start gap-2 bg-neutral-50 p-2 rounded-lg"
                 >
                   <div className="flex-grow">
                     <span className="font-bold text-sm">{id}:</span>{" "}
@@ -331,18 +331,18 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
                 value={newShipToId}
                 onChange={(e) => setNewShipToId(e.target.value)}
                 placeholder="ID"
-                className="w-24 px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-apple-blue/20"
+                className="w-24 px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
               />
               <input
                 type="text"
                 value={newShipToAddress}
                 onChange={(e) => setNewShipToAddress(e.target.value)}
                 placeholder="Address"
-                className="flex-grow px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-apple-blue/20"
+                className="flex-grow px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/20"
               />
               <button
                 onClick={addShipTo}
-                className="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-sm hover:bg-slate-200"
+                className="bg-neutral-100 text-neutral-700 px-3 py-2 rounded-lg text-sm hover:bg-neutral-200"
               >
                 Add
               </button>
@@ -352,13 +352,13 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
           <div className="flex justify-end gap-3 pt-4">
             <button
               onClick={handleCancel}
-              className="px-4 py-2 text-slate-600 hover:text-slate-800 font-medium"
+              className="px-4 py-2 text-neutral-600 hover:text-neutral-800 font-medium"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="bg-apple-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-apple-blueHover"
+              className="bg-brand-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-brand-primaryHover"
             >
               Save Customer
             </button>
@@ -366,51 +366,51 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
         </div>
       )}
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50/50 border-b border-slate-200">
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <tr className="bg-neutral-50/50 border-b border-neutral-200">
+                <th className="px-6 py-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">
                   Customer ID
                 </th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">
                   Names
                 </th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">
                   Sales Org
                 </th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">
                   Ship To Count
                 </th>
-                <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-neutral-100">
               {filteredCustomers.map((customer) => (
                 <tr
                   key={customer._id}
-                  className="hover:bg-slate-50/50 transition-colors"
+                  className="hover:bg-neutral-50/50 transition-colors"
                 >
-                  <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                  <td className="px-6 py-4 text-sm font-medium text-neutral-900">
                     {customer.customer_id}
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600">
+                  <td className="px-6 py-4 text-sm text-neutral-600">
                     {customer.customer_names.join(", ")}
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600">
+                  <td className="px-6 py-4 text-sm text-neutral-600">
                     {customer.sales_org}
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600">
+                  <td className="px-6 py-4 text-sm text-neutral-600">
                     {Object.keys(customer.ship_to || {}).length}
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <div className="flex gap-3">
                       <button
                         onClick={() => handleEdit(customer)}
-                        className="text-apple-blue hover:underline"
+                        className="text-brand-primary hover:underline"
                       >
                         Edit
                       </button>
@@ -428,7 +428,7 @@ export const CustomerMaster: React.FC<CustomerMasterProps> = ({ onBack }) => {
                 <tr>
                   <td
                     colSpan={5}
-                    className="px-6 py-8 text-center text-slate-500"
+                    className="px-6 py-8 text-center text-neutral-500"
                   >
                     No customers found.
                   </td>

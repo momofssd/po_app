@@ -28,20 +28,20 @@ export const QueueDisplay: React.FC<QueueDisplayProps> = ({
       {files.length > 0 && (
         <div className="mt-8 animate-fade-in">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[11px] font-semibold text-apple-subtext uppercase tracking-widest">
+            <h3 className="text-[11px] font-semibold text-brand-subtext uppercase tracking-widest">
               Queue ({files.length})
             </h3>
             {status !== ProcessingStatus.PROCESSING && (
               <button
                 onClick={onClearQueue}
-                className="text-xs text-apple-subtext hover:text-red-500 font-medium transition-colors"
+                className="text-xs text-brand-subtext hover:text-red-500 font-medium transition-colors"
               >
                 Clear All
               </button>
             )}
           </div>
 
-          <div className="bg-slate-50/50 rounded-2xl border border-slate-200/60 max-h-[400px] overflow-y-auto custom-scrollbar p-2">
+          <div className="bg-neutral-50/50 rounded-2xl border border-neutral-200/60 max-h-[400px] overflow-y-auto custom-scrollbar p-2">
             <ul className="space-y-1">
               {files.map((file, idx) => (
                 <li
@@ -50,7 +50,7 @@ export const QueueDisplay: React.FC<QueueDisplayProps> = ({
                 >
                   <div className="flex items-center space-x-3 w-4/5">
                     <svg
-                      className="w-5 h-5 text-apple-blue flex-shrink-0"
+                      className="w-5 h-5 text-brand-primary flex-shrink-0"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -63,7 +63,7 @@ export const QueueDisplay: React.FC<QueueDisplayProps> = ({
                       />
                     </svg>
                     <span
-                      className="truncate text-sm font-medium text-apple-text"
+                      className="truncate text-sm font-medium text-brand-text"
                       title={file.name}
                     >
                       {file.name}
@@ -73,7 +73,7 @@ export const QueueDisplay: React.FC<QueueDisplayProps> = ({
                   {status !== ProcessingStatus.PROCESSING && (
                     <button
                       onClick={() => onRemoveFile(idx)}
-                      className="text-slate-300 hover:text-red-500 transition-colors p-1"
+                      className="text-neutral-300 hover:text-red-500 transition-colors p-1"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +108,7 @@ export const QueueDisplay: React.FC<QueueDisplayProps> = ({
                           </svg>
                         </span>
                       ) : idx === processedCount ? (
-                        <span className="text-apple-blue animate-spin">
+                        <span className="text-brand-primary animate-spin">
                           <svg
                             className="h-5 w-5"
                             xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +131,7 @@ export const QueueDisplay: React.FC<QueueDisplayProps> = ({
                           </svg>
                         </span>
                       ) : (
-                        <span className="h-2 w-2 rounded-full bg-slate-200"></span>
+                        <span className="h-2 w-2 rounded-full bg-neutral-200"></span>
                       )}
                     </div>
                   )}
@@ -143,7 +143,7 @@ export const QueueDisplay: React.FC<QueueDisplayProps> = ({
           {status !== ProcessingStatus.PROCESSING && (
             <button
               onClick={onStartProcessing}
-              className="mt-6 w-full flex items-center justify-center py-3.5 px-4 rounded-xl text-sm font-semibold text-white bg-apple-blue hover:bg-apple-blueHover active:scale-[0.98] shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-200"
+              className="mt-6 w-full flex items-center justify-center py-3.5 px-4 rounded-xl text-sm font-semibold text-white bg-brand-primary hover:bg-brand-primaryHover active:scale-[0.98] shadow-sm transition-all duration-200"
             >
               Start Processing Batch
             </button>
@@ -159,32 +159,32 @@ export const QueueDisplay: React.FC<QueueDisplayProps> = ({
 
       {/* Processing Status Card */}
       {status === ProcessingStatus.PROCESSING && (
-        <div className="bg-white/60 rounded-3xl p-6 border border-white/60 shadow-apple backdrop-blur-xl animate-fade-in">
+        <div className="bg-white/60 rounded-3xl p-6 border border-brand-border shadow-brand backdrop-blur-xl animate-fade-in">
           <div className="flex flex-col space-y-4">
             <div className="flex justify-between items-end">
               <div>
-                <span className="text-[11px] font-semibold text-apple-blue uppercase tracking-widest">
+                <span className="text-[11px] font-semibold text-brand-primary uppercase tracking-widest">
                   Analysis in Progress
                 </span>
-                <p className="text-2xl font-semibold text-apple-text mt-1 tracking-tight">
+                <p className="text-2xl font-semibold text-brand-text mt-1 tracking-tight">
                   {Math.round((processedCount / files.length) * 100)}%
                 </p>
               </div>
-              <span className="text-sm font-medium text-apple-subtext">
+              <span className="text-sm font-medium text-brand-subtext">
                 {processedCount} / {files.length} Files
               </span>
             </div>
 
-            <div className="relative w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+            <div className="relative w-full bg-neutral-100 rounded-full h-1.5 overflow-hidden">
               <div
-                className="absolute h-full rounded-full bg-apple-blue transition-all duration-500 ease-out"
+                className="absolute h-full rounded-full bg-brand-primary transition-all duration-500 ease-out"
                 style={{ width: `${(processedCount / files.length) * 100}%` }}
               ></div>
             </div>
 
-            <div className="bg-blue-50/50 rounded-xl p-3 flex items-start space-x-3 border border-blue-100/50">
+            <div className="bg-primary-50/50 rounded-xl p-3 flex items-start space-x-3 border border-primary-100/50">
               <svg
-                className="w-5 h-5 text-apple-blue mt-0.5 animate-pulse"
+                className="w-5 h-5 text-brand-primary mt-0.5 animate-pulse"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -197,10 +197,10 @@ export const QueueDisplay: React.FC<QueueDisplayProps> = ({
                 />
               </svg>
               <div>
-                <p className="text-xs text-apple-text font-semibold">
+                <p className="text-xs text-brand-text font-semibold">
                   Current Task
                 </p>
-                <p className="text-xs text-apple-subtext truncate max-w-[200px] mt-0.5">
+                <p className="text-xs text-brand-subtext truncate max-w-[200px] mt-0.5">
                   Extracting data from {currentFile}...
                 </p>
               </div>

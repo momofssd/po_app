@@ -64,10 +64,10 @@ export const CustomerSelector: React.FC = () => {
 
   return (
     <div
-      className="relative z-20 bg-apple-card rounded-3xl shadow-apple border border-white/50 p-8 backdrop-blur-xl"
+      className="relative z-20 bg-brand-card rounded-3xl shadow-brand border border-brand-border p-8 backdrop-blur-xl"
       ref={wrapperRef}
     >
-      <h2 className="text-xl font-semibold text-apple-text mb-6 flex items-center tracking-tight">
+      <h2 className="text-xl font-semibold text-brand-text mb-6 flex items-center tracking-tight">
         Customer Master
       </h2>
 
@@ -76,7 +76,7 @@ export const CustomerSelector: React.FC = () => {
         <div className="relative">
           <input
             type="text"
-            className="w-full pl-10 pr-10 py-3 bg-apple-bg/50 border border-slate-200/60 rounded-xl text-[15px] text-apple-text placeholder:text-apple-subtext focus:outline-none focus:ring-2 focus:ring-apple-blue/20 focus:border-apple-blue transition-all cursor-pointer"
+            className="w-full pl-10 pr-10 py-3 bg-brand-bg/50 border border-neutral-200/60 rounded-xl text-[15px] text-brand-text placeholder:text-brand-subtext focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all cursor-pointer"
             placeholder="Select or Search Customer..."
             value={query}
             onChange={(e) => {
@@ -87,7 +87,7 @@ export const CustomerSelector: React.FC = () => {
             disabled={!!selectedCustomer}
           />
           <svg
-            className="w-4 h-4 text-apple-subtext absolute left-3.5 top-3.5"
+            className="w-4 h-4 text-brand-subtext absolute left-3.5 top-3.5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -103,7 +103,7 @@ export const CustomerSelector: React.FC = () => {
           <div className="absolute right-3 top-3 flex items-center space-x-2">
             {isSearching ? (
               <svg
-                className="animate-spin h-4 w-4 text-apple-subtext"
+                className="animate-spin h-4 w-4 text-brand-subtext"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -125,7 +125,7 @@ export const CustomerSelector: React.FC = () => {
             ) : selectedCustomer ? (
               <button
                 onClick={handleClear}
-                className="p-1 text-apple-subtext hover:text-red-500 transition-colors"
+                className="p-1 text-brand-subtext hover:text-red-500 transition-colors"
               >
                 <svg
                   className="w-4 h-4"
@@ -144,7 +144,7 @@ export const CustomerSelector: React.FC = () => {
             ) : (
               <button
                 onClick={toggleDropdown}
-                className="p-1 text-apple-subtext hover:text-apple-text transition-colors"
+                className="p-1 text-brand-subtext hover:text-brand-text transition-colors"
               >
                 <svg
                   className={`w-4 h-4 transition-transform ${showDropdown ? "rotate-180" : ""}`}
@@ -166,22 +166,22 @@ export const CustomerSelector: React.FC = () => {
 
         {/* Dropdown Results */}
         {showDropdown && !selectedCustomer && (
-          <div className="absolute z-50 w-full mt-2 bg-white/90 backdrop-blur-xl rounded-xl shadow-apple-hover border border-slate-100 max-h-56 overflow-y-auto custom-scrollbar">
+          <div className="absolute z-50 w-full mt-2 bg-white/90 backdrop-blur-xl rounded-xl shadow-brand-hover border border-neutral-100 max-h-56 overflow-y-auto custom-scrollbar">
             {results.length > 0 ? (
               results.map((customer) => (
                 <button
                   key={customer._id}
                   onClick={() => handleSelect(customer)}
-                  className="w-full text-left px-4 py-3 hover:bg-apple-bg border-b border-slate-50 last:border-0 transition-colors group"
+                  className="w-full text-left px-4 py-3 hover:bg-brand-bg border-b border-neutral-50 last:border-0 transition-colors group"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="text-[15px] font-medium text-apple-text">
+                      <p className="text-[15px] font-medium text-brand-text">
                         {customer.customer_names.join(" / ")}
                       </p>
-                      <p className="text-xs text-apple-subtext mt-0.5 font-medium">
+                      <p className="text-xs text-brand-subtext mt-0.5 font-medium">
                         ID:{" "}
-                        <span className="font-mono text-apple-text">
+                        <span className="font-mono text-brand-text">
                           {customer.customer_id}
                         </span>
                       </p>
@@ -190,7 +190,7 @@ export const CustomerSelector: React.FC = () => {
                 </button>
               ))
             ) : (
-              <div className="px-4 py-4 text-sm text-apple-subtext text-center">
+              <div className="px-4 py-4 text-sm text-brand-subtext text-center">
                 No customers found
               </div>
             )}
@@ -202,33 +202,33 @@ export const CustomerSelector: React.FC = () => {
       {selectedCustomer ? (
         <div className="space-y-6 animate-fade-in">
           {/* Combined Customer Details Card */}
-          <div className="bg-white/60 rounded-2xl p-6 border border-white/50 shadow-sm space-y-6 backdrop-blur-sm">
+          <div className="bg-white/60 rounded-2xl p-6 border border-brand-border shadow-sm space-y-6 backdrop-blur-sm">
             <div className="flex justify-between items-start">
               <div className="flex-1 mr-4">
-                <p className="text-[11px] font-semibold text-apple-subtext uppercase tracking-widest mb-1.5">
+                <p className="text-[11px] font-semibold text-brand-subtext uppercase tracking-widest mb-1.5">
                   Customer Name
                 </p>
-                <h3 className="text-[15px] font-semibold text-apple-text leading-tight tracking-tight">
+                <h3 className="text-[15px] font-semibold text-brand-text leading-tight tracking-tight">
                   {selectedCustomer.customer_names.join(" / ")}
                 </h3>
               </div>
               <div className="text-right">
-                <p className="text-[11px] font-semibold text-apple-subtext uppercase tracking-widest mb-1.5">
+                <p className="text-[11px] font-semibold text-brand-subtext uppercase tracking-widest mb-1.5">
                   Customer ID
                 </p>
-                <span className="font-mono text-apple-blue font-medium bg-blue-50/50 px-2.5 py-1 rounded-lg text-xs border border-blue-100/50">
+                <span className="font-mono text-brand-primary font-medium bg-primary-50/50 px-2.5 py-1 rounded-lg text-xs border border-primary-100/50">
                   {selectedCustomer.customer_id}
                 </span>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div className="pt-4 border-t border-neutral-100 flex items-center justify-between">
               <div>
-                <p className="text-[11px] font-semibold text-apple-subtext uppercase tracking-widest mb-1.5">
+                <p className="text-[11px] font-semibold text-brand-subtext uppercase tracking-widest mb-1.5">
                   Sales Organization
                 </p>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm font-semibold text-apple-text">
+                  <span className="text-sm font-semibold text-brand-text">
                     {selectedCustomer.sales_org}
                   </span>
                 </div>
@@ -241,11 +241,11 @@ export const CustomerSelector: React.FC = () => {
 
           {/* Ship To List */}
           <div>
-            <p className="text-[11px] font-semibold text-apple-subtext uppercase tracking-widest mb-3 pl-1">
+            <p className="text-[11px] font-semibold text-brand-subtext uppercase tracking-widest mb-3 pl-1">
               Ship To Addresses
             </p>
-            <div className="bg-apple-bg/50 rounded-2xl border border-slate-200/60 overflow-hidden max-h-60 overflow-y-auto custom-scrollbar">
-              <ul className="divide-y divide-slate-100">
+            <div className="bg-brand-bg/50 rounded-2xl border border-neutral-200/60 overflow-hidden max-h-60 overflow-y-auto custom-scrollbar">
+              <ul className="divide-y divide-neutral-100">
                 {selectedCustomer.ship_to &&
                   Object.entries(selectedCustomer.ship_to).map(
                     ([id, address]) => (
@@ -254,10 +254,10 @@ export const CustomerSelector: React.FC = () => {
                         className="p-4 hover:bg-white/60 transition-colors"
                       >
                         <div className="flex items-start space-x-4">
-                          <div className="bg-white border border-slate-200 px-2.5 py-1 rounded-md text-xs font-mono font-semibold text-apple-text mt-0.5 shadow-sm">
+                          <div className="bg-white border border-neutral-200 px-2.5 py-1 rounded-md text-xs font-mono font-semibold text-brand-text mt-0.5 shadow-sm">
                             {id}
                           </div>
-                          <p className="text-sm text-apple-text leading-relaxed font-light">
+                          <p className="text-sm text-brand-text leading-relaxed font-light">
                             {address}
                           </p>
                         </div>
